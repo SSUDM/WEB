@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React from 'react';
+import { FaCircleUser } from "react-icons/fa6";
 
 const NavbarStyle = styled.header`
   position: fixed;
@@ -12,7 +13,7 @@ const NavbarStyle = styled.header`
   flex-direction: row;
   align-items: center; */
   display: grid;
-  grid-template-columns: 1fr 1fr 6fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 6fr 0.8fr 0.3fr 1.2fr;
   align-items: center;
 `;
 const H1 = styled.h1`
@@ -42,6 +43,7 @@ const Navbar = () => {
         <P>프로젝트</P>
         <P>팀원 찾기</P>
         <P>로그인</P>
+        <FaCircleUser size={20}/>
         <CreateProject>+프로젝트 생성</CreateProject>
     </NavbarStyle>
   )
