@@ -30,9 +30,9 @@ const CreateProject = styled.button`
     padding: 10px;
     width: 150px;
     &:hover {
-    outline: none; /* 포커스 테두리 제거 (선택 사항) */
-    border: 2px solid #9E9E9E; /* 포커스 시 테두리 스타일 */
-    background-color: #9E9E9E; /* 포커스 시 배경색 변경 */
+    outline: none;
+    border: 2px solid #9E9E9E;
+    background-color: #9E9E9E;
   }
 `;
 const Navbar = () => {
