@@ -1,10 +1,40 @@
 import React from 'react'
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useNavigate } from 'react-router-dom';
 
 const AuthPage = () => {
     const { register, handleSubmit, getValues, formState:{errors} } = useForm();
+
+    const P = styled.p`
+    color: red;
+    `;
+
+    const Button = styled.button`
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+    background: blue;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    :disabled {
+        opacity: 0.2;
+    }
+    `;
+    const WrapBox = styled.div`
+        display: flex;
+        justify-content: center;
+        margin: 100px;
+    `;
+    const H3 = styled.h3`
+        margin-bottom: 100px;
+        line-height: 1.5px;
+        font-weight: bold;
+    `;
 
     // 폼 제출 시 실행되는 함수
     const onSubmit = (data) => {
@@ -90,36 +120,5 @@ const AuthPage = () => {
         </WrapBox>
     );
 }
-
-const P = styled.p`
-    color: red;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 20px;
-  border-radius: 15px;
-  background: blue;
-  font-size: 20px;
-  border: none;
-  outline: none;
-  text-align: center;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s;
-  :disabled {
-    opacity: 0.2;
-  }
-`;
-const WrapBox = styled.div`
-    display: flex;
-    justify-content: center;
-    margin: 100px;
-`;
-const H3 = styled.h3`
-    margin-bottom: 100px;
-    line-height: 1.5px;
-    font-weight: bold;
-`;
 
 export default AuthPage
