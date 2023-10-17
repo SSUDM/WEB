@@ -56,7 +56,7 @@ const Tags = styled.div`
 
 const Tag = styled.div`
   margin-left: 15px;
-  label {
+  span {
     font-size: 15px;
     font-weight: 600;
   }
@@ -71,7 +71,7 @@ const Description = styled.div`
 `;
 
 const Contents = styled.textarea`
-  width: 500px;
+  width: 480px;
   height: 600px;
   border: solid 1.5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -99,9 +99,9 @@ const Button = styled.button`
 const NewProject = () => {
   return (
     <Container>
-      <label for="file">
+      <span for="file">
         <ProjectImg>+ 이미지 추가</ProjectImg>
-      </label>
+      </span>
       <input type="file" id="file" style={{ display: "none" }} />
       <Title>
         <h1>프로젝트 명</h1>
@@ -109,22 +109,22 @@ const NewProject = () => {
       </Title>
       <Tags>
         <Tag>
-          <label>모집 파트</label>
+          <span>모집 파트</span>
         </Tag>
         <Tag>
-          <label>모집 인원</label>
+          <span>모집 인원</span>
         </Tag>
         <Tag>
-          <label>기술 스택</label>
+          <span>기술 스택</span>
         </Tag>
         <Tag>
-          <label>개발 기간</label>
+          <span>개발 기간</span>
         </Tag>
         <Tag>
-          <label>모집 마감</label>
+          <span>모집 마감</span>
         </Tag>
         <Tag>
-          <label>요구 숙련도</label>
+          <span>요구 숙련도</span>
         </Tag>
       </Tags>
       <Description>
