@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import SelectProject from "../components/SelectProject";
+import { useState } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -6,7 +8,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   font-family: "Pretendard-Regular";
-  margin: 50px 0;
+  margin: 70px 0;
 `;
 
 const UserInfoContainer = styled.div`
@@ -37,18 +39,24 @@ const UserInfo = styled.div`
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
   width: 200px;
   height: 70px;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  padding: 15px;
 `;
 
 const Content = styled.div`
+  display: flex;
+  h1 {
+    width: 70px;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+  }
   span {
     font-size: 14px;
-    font-weight: 700;
   }
 `;
 
@@ -152,22 +160,44 @@ const Button = styled.button`
   font-family: "Pretendard-Regular";
 `;
 
+const ModalContainer = styled.div`
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
 const Profile = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const onClick = () => {
+    setIsOpen(true);
+  };
   return (
     <Container>
+      {isOpen ? (
+        <ModalContainer>
+          <SelectProject setIsOpen={setIsOpen} />
+        </ModalContainer>
+      ) : null}
       <UserInfoContainer>
         <UserImg />
         <UserInfo>
           <h1>유미라</h1>
           <Contents>
             <Content>
-              <span>파트</span>
+              <h1>파트</h1>
+              <span>프론트엔드</span>
             </Content>
             <Content>
-              <span>숙련도</span>
+              <h1>숙련도</h1>
+              <span>초급</span>
             </Content>
             <Content>
-              <span>별점</span>
+              <h1>별점</h1>
+              <span>5.0점</span>
             </Content>
           </Contents>
         </UserInfo>
@@ -201,7 +231,7 @@ const Profile = () => {
           <span>숭실대 프로젝트 과목</span>
         </Project>
       </Projects>
-      <Button>협업 요청하기</Button>
+      <Button onClick={onClick}>협업 요청하기</Button>
     </Container>
   );
 };

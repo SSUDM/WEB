@@ -1,3 +1,5 @@
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isProjectOwner } from "../components/atom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -6,7 +8,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   font-family: "Pretendard-Regular";
-  margin: 50px 0;
+  margin: 70px 0;
 `;
 
 const ProjectImg = styled.img`
@@ -82,6 +84,7 @@ const Description = styled.div`
   h1 {
     font-size: 18px;
   }
+  margin-bottom: 70px;
 `;
 
 const Contents = styled.div`
@@ -93,7 +96,65 @@ const Contents = styled.div`
   border-right-color: white;
 `;
 
+const Button = styled.button`
+  width: 160px;
+  height: 30px;
+  border: none;
+  border-radius: 20px;
+  color: black;
+  background-color: rgba(0, 0, 0, 0.2);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: "Pretendard-Regular";
+`;
+
+const Recommend = styled.div`
+  width: 600px;
+  h1 {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+`;
+
+const UserCards = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const UserCard = styled.div`
+  width: 150px;
+  height: 90px;
+  padding: 15px;
+  border-radius: 20px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  span {
+    font-size: 12px;
+  }
+`;
+
+const CardUser = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  span {
+    font-size: 14px;
+    font-weight: 700;
+  }
+`;
+
+const CardImg = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-right: 10px;
+`;
+
 const Project = () => {
+  // const isProjectOwner = useRecoilValue(isProjectOwner);
+  const isProjectOwner = true;
+
   return (
     <Container>
       <ProjectImg />
@@ -132,6 +193,36 @@ const Project = () => {
         <h1>프로젝트 소개</h1>
         <Contents>많은 관심 바람</Contents>
       </Description>
+      {isProjectOwner ? (
+        <Recommend>
+          <h1>이런 팀원 어때요?</h1>
+          <UserCards>
+            <UserCard>
+              <CardUser>
+                <CardImg />
+                <span>이름</span>
+              </CardUser>
+              <span>간단한 자기소개</span>
+            </UserCard>
+            <UserCard>
+              <CardUser>
+                <CardImg />
+                <span>이름</span>
+              </CardUser>
+              <span>간단한 자기소개</span>
+            </UserCard>
+            <UserCard>
+              <CardUser>
+                <CardImg />
+                <span>이름</span>
+              </CardUser>
+              <span>간단한 자기소개</span>
+            </UserCard>
+          </UserCards>
+        </Recommend>
+      ) : (
+        <Button>프로젝트 지원하기</Button>
+      )}
     </Container>
   );
 };
