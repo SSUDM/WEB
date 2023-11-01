@@ -10,12 +10,15 @@ import ManageMember from "./routes/ManageMember";
 import FinishProject from "./routes/FinishProject";
 import ReviewMember from "./routes/ReviewMember";
 import NewProfile from "./routes/NewProfile";
+import MyProject from "./routes/MyProject";
+import RecommendProject from "./routes/RecommendProject";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
+        <Route path="/" element={<MyProject/>}/>
         <Route path="/newProject" element={<NewProject />} />
         <Route path="/project" element={<Project />} />
         <Route path="/newProfile" element={<NewProfile />} />
@@ -25,6 +28,7 @@ function App() {
         <Route path="/manageMember" element={<ManageMember />} />
         <Route path="/finishProject" element={<FinishProject />} />
         <Route path="/reviewMember" element={<ReviewMember />} />
+        <Route path="/recommend" element={<RecommendProject/>}/>
       </Routes>
     </BrowserRouter>
   );
