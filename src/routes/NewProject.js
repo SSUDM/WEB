@@ -21,6 +21,7 @@ const ProjectImg = styled.div`
   font-size: 18px;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 `;
 
 const Title = styled.div`
@@ -72,12 +73,13 @@ const Description = styled.div`
 
 const Contents = styled.textarea`
   width: 480px;
-  height: 600px;
+  height: 400px;
   border: solid 1.5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   padding: 10px;
   font-size: 15px;
   font-family: "Pretendard-Regular";
+  resize: none;
   &::placeholder {
     color: rgba(0, 0, 0, 0.3);
   }
@@ -99,10 +101,15 @@ const Button = styled.button`
 const NewProject = () => {
   return (
     <Container>
-      <span for="file">
+      <label for="file">
         <ProjectImg>+ 이미지 추가</ProjectImg>
-      </span>
-      <input type="file" id="file" style={{ display: "none" }} />
+      </label>
+      <input
+        type="file"
+        accept="image/*"
+        id="file"
+        style={{ display: "none" }}
+      />
       <Title>
         <h1>프로젝트 명</h1>
         <input />
