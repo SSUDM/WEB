@@ -1,6 +1,12 @@
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isProjectOwner } from "../components/atom";
+import { useRecoilValue } from "recoil";
+import { isProjectOwnerState } from "../components/atom";
 import styled from "styled-components";
+import { useQuery } from "react-query";
+import { getProject, getRecommendedMembers } from "../api";
+import { Link, useNavigate } from "react-router-dom";
+import { IoMenu } from "react-icons/io5";
+import { useState } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -9,6 +15,31 @@ const Container = styled.div`
   justify-content: center;
   font-family: "Pretendard-Regular";
   margin: 70px 0;
+`;
+
+const Menu = styled.div`
+  width: 16px;
+  height: 16px;
+  margin-left: 485px;
+  margin-bottom: 10px;
+  cursor: pointer;
+`;
+
+const DropDown = styled.ul`
+  position: relative;
+  top: 3px;
+  right: 85px;
+  width: 100px;
+  padding: 0;
+  margin: 0;
+  border-radius: 5px;
+  list-style: none;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  li {
+    padding: 8px;
+    font-size: 15px;
+  }
 `;
 
 const ProjectImg = styled.img`
@@ -20,6 +51,8 @@ const ProjectImg = styled.img`
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   margin-bottom: 30px;
+  object-fit: cover;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
 `;
 
 const Title = styled.span`
@@ -47,10 +80,10 @@ const UserImg = styled.img`
   margin-right: 10px;
 `;
 
-const Tags = styled.div`
+const Info = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   width: 500px;
   border: solid 2px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
@@ -63,17 +96,25 @@ const TagContainer = styled.div`
   align-items: center;
   margin-left: 15px;
   h1 {
+    width: 80px;
     margin: 0;
-    font-size: 15px;
+    font-size: 16px;
     margin-right: 10px;
   }
   span {
-    font-size: 14px;
+    font-size: 15px;
   }
 `;
 
+const Tags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 395px;
+`;
+
 const Tag = styled.div`
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 300;
   padding: 2px 10px;
   background-color: rgba(0, 0, 0, 0.1);
@@ -102,11 +143,13 @@ const Button = styled.button`
   border: none;
   border-radius: 20px;
   color: black;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: ${({ isApplied }) =>
+    isApplied ? "rgba(0, 0, 0, 0.2)" : "#FFCAD5"};
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   font-family: "Pretendard-Regular";
+  display: ${({ isApplied }) => (isApplied ? "block" : "inline-block")};
 `;
 
 const Recommend = styled.div`
@@ -128,17 +171,21 @@ const UserCard = styled.div`
   padding: 15px;
   border-radius: 20px;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-  span {
-    font-size: 12px;
+  div {
+    max-height: 48px;
+    font-size: 13px;
+    overflow: hidden;
   }
+  cursor: pointer;
+  overflow: hidden;
 `;
 
 const CardUser = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   span {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
   }
 `;
@@ -152,21 +199,103 @@ const CardImg = styled.img`
 `;
 
 const Project = () => {
-  // const isProjectOwner = useRecoilValue(isProjectOwner);
-  const isProjectOwner = true;
+  const isProjectOwner = useRecoilValue(isProjectOwnerState);
+  const memberId = 1;
+  const projectId = 1;
+  const isApplied = false;
+  const [view, setView] = useState(false);
+  const navigate = useNavigate();
+
+  const { data: project } = useQuery({
+    queryKey: ["project"],
+    queryFn: () => getProject(memberId.toString(), projectId.toString()),
+  });
+
+  const { data: recommandedMembers } = useQuery({
+    queryKey: ["recommandedMembers"],
+    queryFn: () =>
+      getRecommendedMembers(memberId.toString(), projectId.toString()),
+  });
+
+  const onApply = () => {
+    try {
+      /*
+      const res = await axios({
+        method: "post",
+        url: `api-address`,
+      });
+
+      console.log(res);
+      */
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteProject = async () => {
+    /*
+    try {
+      const response = await axios.delete(`/api/projects/${projectId}`);
+      console.log(response.data);
+    } catch (error) {
+      console.error("프로젝트 삭제 오류:", error);
+    }
+    */
+  };
+
+  const onConfirm = () => {
+    if (window.confirm("프로젝트를 종료하시겠습니까?")) {
+      console.log("프로젝트 종료");
+      deleteProject();
+      // navigate("내 프로젝트로");
+    } else {
+      console.log("프로젝트 종료 취소");
+    }
+  };
 
   return (
     <Container>
-      <ProjectImg />
-      <Title>캡스톤 디자인 1</Title>
+      {isProjectOwner && (
+        <Menu onClick={() => setView(!view)}>
+          <IoMenu />
+          {view && (
+            <DropDown>
+              <Link
+                to={"/manageMember"}
+                style={{ textDecorationLine: "none", color: "black" }}
+              >
+                <li>팀원 관리</li>
+              </Link>
+              <li>프로젝트 수정</li>
+              <li onClick={onConfirm}>프로젝트 종료</li>
+            </DropDown>
+          )}
+        </Menu>
+      )}
+      <ProjectImg
+        src={
+          project?.projectImg ? project?.projectImg : "../../img/project.jpg"
+        }
+      />
+      <Title>{project?.title}</Title>
       <User>
-        <UserImg />
+        <UserImg
+          src={
+            project?.userImg
+              ? project?.userImg
+              : "../../img/default_profile.png"
+          }
+        />
         <span>김OO</span>
       </User>
-      <Tags>
+      <Info>
         <TagContainer>
           <h1>모집 파트</h1>
-          <Tag>프론트엔드</Tag>
+          <Tags>
+            {project?.recPart.map((data) => (
+              <Tag>{data}</Tag>
+            ))}
+          </Tags>
         </TagContainer>
         <TagContainer>
           <h1>모집 인원</h1>
@@ -174,11 +303,15 @@ const Project = () => {
         </TagContainer>
         <TagContainer>
           <h1>기술 스택</h1>
-          <Tag>react.js</Tag>
+          <Tags>
+            {project?.recTech.map((data) => (
+              <Tag>{data}</Tag>
+            ))}
+          </Tags>
         </TagContainer>
         <TagContainer>
           <h1>개발 기간</h1>
-          <span>2000.00.00 - 2000.00.00</span>
+          <span>1개월 미만</span>
         </TagContainer>
         <TagContainer>
           <h1>모집 마감</h1>
@@ -188,40 +321,41 @@ const Project = () => {
           <h1>요구 숙련도</h1>
           <Tag>초급</Tag>
         </TagContainer>
-      </Tags>
+      </Info>
       <Description>
         <h1>프로젝트 소개</h1>
-        <Contents>많은 관심 바람</Contents>
+        <Contents>{project?.content}</Contents>
       </Description>
       {isProjectOwner ? (
         <Recommend>
           <h1>이런 팀원 어때요?</h1>
           <UserCards>
-            <UserCard>
-              <CardUser>
-                <CardImg />
-                <span>이름</span>
-              </CardUser>
-              <span>간단한 자기소개</span>
-            </UserCard>
-            <UserCard>
-              <CardUser>
-                <CardImg />
-                <span>이름</span>
-              </CardUser>
-              <span>간단한 자기소개</span>
-            </UserCard>
-            <UserCard>
-              <CardUser>
-                <CardImg />
-                <span>이름</span>
-              </CardUser>
-              <span>간단한 자기소개</span>
-            </UserCard>
+            {recommandedMembers?.map((member) => (
+              <Link
+                to="/profile"
+                style={{ textDecorationLine: "none", color: "black" }}
+              >
+                <UserCard>
+                  <CardUser>
+                    <CardImg
+                      src={
+                        project?.recommendedUserImg
+                          ? project?.recommendedUserImg
+                          : "../../img/default_profile.png"
+                      }
+                    />
+                    <span>{member?.name}</span>
+                  </CardUser>
+                  <div>{member?.intorduction}</div>
+                </UserCard>
+              </Link>
+            ))}
           </UserCards>
         </Recommend>
       ) : (
-        <Button>프로젝트 지원하기</Button>
+        <Button isApplied={isApplied} onClick={onApply}>
+          프로젝트 지원하기
+        </Button>
       )}
     </Container>
   );

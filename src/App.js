@@ -18,7 +18,7 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<MyProject/>}/>
+        <Route path="/" element={<MyProject />} />
         <Route path="/newProject" element={<NewProject />} />
         <Route path="/project" element={<Project />} />
         <Route path="/newProfile" element={<NewProfile />} />
@@ -28,7 +28,7 @@ function App() {
         <Route path="/manageMember" element={<ManageMember />} />
         <Route path="/finishProject" element={<FinishProject />} />
         <Route path="/reviewMember" element={<ReviewMember />} />
-        <Route path="/recommend" element={<RecommendProject/>}/>
+        <Route path="/recommend" element={<RecommendProject />} />
       </Routes>
     </BrowserRouter>
   );
