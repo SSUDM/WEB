@@ -2,14 +2,34 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import {ReactComponent as Heart} from "../Img/WishHeart.svg";
 
+const ProjectCard = ({data}) => {
+    const [isWished, setIsWished] = useState(false);
+    const wishHandler =() =>{
+        setIsWished(!isWished);
+    }
+      
+  return (
+    <Card>
+        <ProjectDetail/>
+        <Title>{data&&data.title}</Title>
+        <LikedButton onClick={wishHandler}>
+            {isWished?<Heart width="20px" fill="red" stroke="red"/>:<Heart width="20px"/>}
+        </LikedButton>
+    </Card>
+  )
+}
+
 const Card = styled.div`
     position: relative;
-    width: 300px;
-    height: 200px;
-    margin: 0 10px 0 30px;
+    width: 270px;
+    height: 180px;
+    margin: 10px;
     font-family: "Pretendard-Regular";
     border: 2px solid #c8c8c8;
     border-radius: 20px;
+    &:hover{
+        transform: scale(1.03);
+    }
 `;
 const ProjectDetail = styled.div`
     width: 90%;
@@ -37,44 +57,5 @@ const LikedButton = styled.button`
         color: pink;
     }
 `;
-const ProjectCard = () => {
-    const [isWished, setIsWished] = useState(false);
-    const wishHandler =() =>{
-        setIsWished(!isWished);
-    }
-    // const wishCountHandler =() => {
-    //     wishAddHandler()
-    //     if (!isWishAdd) {
-    //       setWishCount(wishCount +1)
-    //       fetch("http://10.58.0.148:8000/product/dip", {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //           "user_id": 8,
-    //           "product_id": 2
-    //         })
-    //       })
-    //     } else if (isWishAdd) {
-    //       setWishCount(wishCount -1)
-    //       fetch("http://10.58.0.148:8000/product/dip", {
-    //         method: "POST",
-    //         body: JSON.stringigy({
-    //           "user_id": 8,
-    //           "product_id": 2,
-    //         })
-    //       })
-    //     }
-    //   }   
-  return (
-    <div>
-        <Card>
-            <ProjectDetail/>
-            <Title>제목을 입력하세요</Title>
-            <LikedButton onClick={wishHandler}>
-                {isWished?<Heart width="20px" fill="red" stroke="red"/>:<Heart width="20px"/>}
-            </LikedButton>
-        </Card>
-    </div>
-  )
-}
 
 export default ProjectCard

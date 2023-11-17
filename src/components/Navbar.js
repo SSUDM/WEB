@@ -10,6 +10,7 @@ const NavbarStyle = styled.header`
   align-items: center;
   width: 100%;
   height: 50px;
+  /* font-size: 18px; */
   font-family: "Pretendard-Regular";
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 `;
@@ -37,27 +38,27 @@ const Menu = styled.p`
   margin-left: 50px;
   font-size: 14px;
   cursor: pointer;
-  &:hover {
-    background-color: #d2d2d2;
-    opacity: 0.6;
-  }
 `;
 const Login = styled.p`
   cursor: pointer;
+  font-size: 14px;
 `;
 
 const CreateProject = styled.button`
   border-radius: 40px;
   border: 0;
   font-weight: bold;
+  font-family: "Pretendard-Regular";
   padding: 10px;
   margin-left: 30px;
   width: 150px;
+  background-color: #d2d2d2;
   cursor: pointer;
   &:hover {
     outline: none;
     border: 2px solid #9e9e9e;
-    background-color: #9e9e9e;
+    background-color: #c8c8c8;
+    transform: scale(1.05);
   }
 `;
 
@@ -82,7 +83,7 @@ const Navbar = () => {
 
       <LeftContainer>
         <Login onClick={goToLogin}>로그인</Login>
-        <FaCircleUser size={20} />
+        <FaCircleUser size={18} />
         <CreateProject>+프로젝트 생성</CreateProject>
       </LeftContainer>
     </NavbarStyle>
