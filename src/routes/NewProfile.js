@@ -1,4 +1,15 @@
 import styled from "styled-components";
+import Select from "react-select";
+import { useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import {
+  levelOptionState,
+  positionOptionState,
+  techOptionState,
+} from "../components/atom";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { IoIosClose } from "react-icons/io";
 
 const Container = styled.div`
   display: flex;
@@ -14,17 +25,14 @@ const UserInfoContainer = styled.div`
   margin-bottom: 70px;
 `;
 
-const UserImg = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const UserImg = styled.img`
   width: 120px;
   height: 120px;
   border-radius: 60px;
-  background-color: rgba(0, 0, 0, 0.1);
+  margin-top: 17px;
   margin-right: 50px;
-  color: white;
   cursor: pointer;
+  object-fit: cover;
 `;
 
 const UserInfo = styled.div`
@@ -39,28 +47,28 @@ const Content = styled.div`
   align-items: center;
   h1 {
     margin: 0px;
-    width: 50px;
-    font-size: 15px;
+    width: 55px;
+    font-size: 16px;
     font-weight: 700;
   }
 `;
 
 const Name = styled.input`
-  width: 150px;
-  height: 20px;
+  width: 140px;
+  height: 30px;
+  font-size: 15px;
   border: none;
   border-bottom: solid 1px rgb(133, 133, 133);
+  margin-left: 5px;
+  margin-bottom: 10px;
   &:focus {
     outline: none;
   }
 `;
 
-const Select = styled.select`
+const SmallSelect = styled(Select)`
   width: 150px;
-  height: 30px;
   padding: 5px;
-  border: solid 1px rgb(0, 0, 0, 0.3);
-  border-radius: 20px;
 `;
 
 const Introduction = styled.div`
@@ -107,6 +115,10 @@ const TechStack = styled.div`
   margin-bottom: 50px;
 `;
 
+const TechSelect = styled(Select)`
+  width: 650px;
+`;
+
 const Career = styled.div`
   display: flex;
   flex-direction: column;
@@ -125,7 +137,7 @@ const CareerInput = styled.div`
   padding: 0 15px;
   width: 620px;
   height: 40px;
-  border: solid 1px rgba(0, 0, 0, 0.3);
+  border: solid 1px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   h1 {
     margin: 0;
@@ -141,7 +153,7 @@ const CareerInfo = styled.input`
   width: 250px;
   height: 20px;
   border: none;
-  border-bottom: solid 1px rgb(133, 133, 133);
+  border-bottom: solid 1px rgba(0, 0, 0, 0.3);
   &:focus {
     outline: none;
   }
@@ -174,7 +186,7 @@ const Project = styled.div`
   border-radius: 10px;
   padding: 15px;
   padding-bottom: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 `;
 
 const ProjectTitle = styled.div`
@@ -186,7 +198,8 @@ const ProjectTitle = styled.div`
     margin-right: 20px;
   }
   input {
-    width: 510px;
+    width: 500px;
+    padding: 5px;
     border: none;
     border-bottom: solid 1px rgb(133, 133, 133);
     &:focus {
@@ -208,6 +221,7 @@ const ProjectContent = styled.div`
     height: 90px;
     resize: none;
     padding: 5px;
+    font-family: "Pretendard-Regular";
     &::placeholder {
       font-family: "Pretendard-Regular";
       color: rgba(0, 0, 0, 0.3);
@@ -235,86 +249,307 @@ const ProfileBtn = styled.button`
   font-weight: 700;
   border: none;
   border-radius: 20px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #ffcad5;
   font-family: "Pretendard-Regular";
   cursor: pointer;
+  margin-top: 50px;
+`;
+
+const ViewCareers = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+const CareerBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 640px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
+  padding: 5px;
+  div {
+    display: flex;
+    h3 {
+      margin: 0;
+      font-size: 15px;
+      margin-left: 20px;
+      margin-right: 50px;
+    }
+    span {
+      font-size: 15px;
+    }
+  }
+  svg {
+    justify-content: flex-end;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    cursor: pointer;
+  }
+`;
+
+const ViewProjects = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const ProjectBox = styled.div`
+  position: relative;
+  width: 625px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  h1 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+  span {
+    font-size: 15px;
+  }
+  svg {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 3%;
+    left: 96%;
+  }
 `;
 
 const NewProfile = () => {
+  const positionOption = useRecoilValue(positionOptionState);
+  const levelOption = useRecoilValue(levelOptionState);
+  const techOption = useRecoilValue(techOptionState);
+  const [userImg, setUserImg] = useState();
+  const [name, setName] = useState("");
+  const [position, setPosition] = useState("");
+  const [level, setLevel] = useState("");
+  const [techs, setTechs] = useState([]);
+  const [introduction, setIntroduction] = useState("");
+  const [careers, setCareers] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [career, setCareer] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [projectTitle, setProjectTitle] = useState();
+  const [project, setProject] = useState();
+
+  const insertImg = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUserImg(file);
+      let reader = new FileReader();
+      reader.onload = () => {
+        const fileURL = reader.result;
+        setUserImg(fileURL);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("userImg", userImg);
+    formData.append("name", name);
+    formData.append("position", position);
+    formData.append("level", level);
+    formData.append("introduction", introduction);
+    formData.append("techs", techs);
+    formData.append("careers", careers);
+    formData.append("projects", projects);
+
+    console.log(JSON.stringify([...formData.entries()]));
+
+    /*
+    try {
+      const res = await axios({
+        method: "post",
+        url: `api-address`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        data: formData,
+      });
+
+      console.log(res);
+      // navigate("/project");
+    } catch (error) {
+      console.error(error);
+    }
+    */
+  };
+
+  const addCareer = () => {
+    setCareers(
+      careers.concat({
+        id: careers.length + 1,
+        startDate: startDate,
+        endDate: endDate,
+        career: career,
+      })
+    );
+
+    setStartDate("");
+    setEndDate("");
+    setCareer("");
+  };
+
+  const deleteCareer = (id) => {
+    setCareers(
+      careers
+        .filter((item) => item.id !== id)
+        .map((item, index) => ({ ...item, id: index + 1 }))
+    );
+    console.log(id);
+  };
+
+  const addProject = () => {
+    setProjects(
+      projects.concat({
+        id: projects.length + 1,
+        projectTitle: projectTitle,
+        project: project,
+      })
+    );
+    setProjectTitle("");
+    setProject("");
+  };
+
+  const deleteProject = (id) => {
+    setProjects(
+      projects
+        .filter((item) => item.id !== id)
+        .map((item, index) => ({ ...item, id: index + 1 }))
+    );
+    console.log(id);
+  };
+
   return (
     <Container>
       <UserInfoContainer>
         <label for="file">
-          <UserImg>이미지 선택</UserImg>
+          <UserImg src={userImg ? userImg : "../../img/default_profile.png"} />
         </label>
         <input
           type="file"
           accept="image/*"
           id="file"
           style={{ display: "none" }}
+          onChange={insertImg}
         />
         <UserInfo>
           <Content>
             <h1>이름</h1>
-            <Name />
+            <Name onChange={(e) => setName(e.target.value)} required />
           </Content>
           <Content>
             <h1>파트</h1>
-            <Select>
-              <option value="none">선택</option>
-              <option value="PM">PM</option>
-              <option value="프론트엔드">프론트엔드</option>
-              <option value="백엔드">백엔드</option>
-              <option value="디자인">디자인</option>
-              <option value="안드로이드">안드로이드</option>
-              <option value="ios">ios</option>
-            </Select>
+            <SmallSelect
+              options={positionOption}
+              onChange={(data) => setPosition(data.value)}
+            />
           </Content>
           <Content>
             <h1>숙련도</h1>
-            <Select>
-              <option value="none">선택</option>
-              <option value="초급">초급</option>
-              <option value="중급">중급</option>
-              <option value="고급">고급</option>
-            </Select>
+            <SmallSelect
+              options={levelOption}
+              onChange={(data) => setLevel(data.value)}
+            />
           </Content>
         </UserInfo>
       </UserInfoContainer>
       <Introduction>
         <h1>자기 소개</h1>
-        <input type="text" maxlength="5" placeholder="자유롭게 입력해주세요." />
+        <input
+          type="text"
+          placeholder="자유롭게 입력해주세요."
+          onChange={(e) => setIntroduction(e.target.value)}
+        />
       </Introduction>
       <TechStack>
         <h1>기술 스택</h1>
-        <input type="text" maxlength="5" placeholder="자유롭게 입력해주세요." />
+        <TechSelect
+          options={techOption}
+          onChange={(array) => {
+            setTechs(array.map((data) => data.value));
+          }}
+          isMulti
+        />
       </TechStack>
       <Career>
         <h1>경력</h1>
         <CareerInput>
           <h1>날짜</h1>
-          <Date type="date" />
+          <Date
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
           {" ~ "}
-          <Date type="date" />
-          <CareerInfo type="text" />
-          <CareerBtn>추가</CareerBtn>
+          <Date
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <CareerInfo
+            type="text"
+            value={career}
+            onChange={(e) => setCareer(e.target.value)}
+          />
+          <CareerBtn onClick={addCareer}>추가</CareerBtn>
         </CareerInput>
+        <ViewCareers>
+          {careers?.map((data) => (
+            <CareerBox>
+              <div>
+                <h3>
+                  {data.startDate} ~ {data.endDate}
+                </h3>
+                <span>{data.career}</span>
+              </div>
+              <IoIosClose onClick={() => deleteCareer(data.id)} />
+            </CareerBox>
+          ))}
+        </ViewCareers>
       </Career>
       <ProjectContainer>
         <h1>프로젝트</h1>
         <Project>
           <ProjectTitle>
             <h1>프로젝트 이름</h1>
-            <input type="text" />
+            <input
+              type="text"
+              value={projectTitle}
+              onChange={(e) => setProjectTitle(e.target.value)}
+            />
           </ProjectTitle>
           <ProjectContent>
             <h1>프로젝트 소개</h1>
-            <textarea placeholder="프로젝트 내용 및 역할" />
+            <textarea
+              placeholder="프로젝트 내용 및 역할"
+              value={project}
+              onChange={(e) => setProject(e.target.value)}
+            />
           </ProjectContent>
-          <ProjectBtn>추가</ProjectBtn>
+          <ProjectBtn onClick={addProject}>추가</ProjectBtn>
         </Project>
+        <ViewProjects>
+          {projects.map((data) => (
+            <ProjectBox>
+              <IoIosClose onClick={() => deleteProject(data.id)} />
+              <h1>{data.projectTitle}</h1>
+              <span>{data.project}</span>
+            </ProjectBox>
+          ))}
+        </ViewProjects>
       </ProjectContainer>
-      <ProfileBtn>이력서 생성하기</ProfileBtn>
+      <ProfileBtn onClick={onSubmit}>이력서 생성하기</ProfileBtn>
     </Container>
   );
 };

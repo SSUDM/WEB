@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import SelectProject from "../components/SelectProject";
 import { useState } from "react";
+import { useQuery } from "react-query";
+import { getResume } from "../api";
 
 const Container = styled.div`
   display: flex;
@@ -91,6 +93,13 @@ const TechStack = styled.div`
   margin-bottom: 30px;
 `;
 
+const Techs = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 500px;
+`;
+
 const Tech = styled.span`
   background-color: rgba(0, 0, 0, 0.1);
   font-size: 14px;
@@ -144,7 +153,7 @@ const Project = styled.div`
     font-size: 14px;
     font-weight: 300;
   }
-  margin-bottom: 100px;
+  margin-bottom: 15px;
 `;
 
 const Button = styled.button`
@@ -153,11 +162,14 @@ const Button = styled.button`
   border: none;
   border-radius: 20px;
   color: black;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: ${({ isRequested }) =>
+    isRequested ? "rgba(0, 0, 0, 0.2)" : "#FFCAD5"};
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   font-family: "Pretendard-Regular";
+  margin-top: 85px;
+  display: ${({ isRequested }) => (isRequested ? "block" : "inline-block")};
 `;
 
 const ModalContainer = styled.div`
@@ -171,10 +183,20 @@ const ModalContainer = styled.div`
 `;
 
 const Profile = () => {
+  const memberId = 1;
   const [isOpen, setIsOpen] = useState(false);
-  const onClick = () => {
+  const [isRequested, setIsRequested] = useState(false);
+  const isOwner = false;
+
+  const { data: resume } = useQuery({
+    queryKey: ["resume"],
+    queryFn: () => getResume(memberId),
+  });
+
+  const onRequest = () => {
     setIsOpen(true);
   };
+
   return (
     <Container>
       {isOpen ? (
@@ -183,17 +205,21 @@ const Profile = () => {
         </ModalContainer>
       ) : null}
       <UserInfoContainer>
-        <UserImg />
+        <UserImg
+          src={
+            resume?.userImg ? resume?.userImg : "../../img/default_profile.png"
+          }
+        />
         <UserInfo>
-          <h1>유미라</h1>
+          <h1>{resume?.userName}</h1>
           <Contents>
             <Content>
               <h1>파트</h1>
-              <span>프론트엔드</span>
+              <span>{resume?.part}</span>
             </Content>
             <Content>
               <h1>숙련도</h1>
-              <span>초급</span>
+              <span>{resume?.level}</span>
             </Content>
             <Content>
               <h1>별점</h1>
@@ -204,14 +230,18 @@ const Profile = () => {
       </UserInfoContainer>
       <Introduction>
         <h1>자기소개</h1>
-        <span>안녕하세요.</span>
+        <span>{resume?.introduction}</span>
       </Introduction>
       <Border />
       <TechStack>
         <h1>기술 스택</h1>
-        <Tech>
-          <span>react.js</span>
-        </Tech>
+        <Techs>
+          {resume?.tech.split(",").map((data) => (
+            <Tech>
+              <span>{data}</span>
+            </Tech>
+          ))}
+        </Techs>
       </TechStack>
       <Border />
       <Career>
@@ -231,7 +261,11 @@ const Profile = () => {
           <span>숭실대 프로젝트 과목</span>
         </Project>
       </Projects>
-      <Button onClick={onClick}>협업 요청하기</Button>
+      {isOwner ? null : (
+        <Button isRequested={isRequested} onClick={onRequest}>
+          협업 요청하기
+        </Button>
+      )}
     </Container>
   );
 };
