@@ -11,23 +11,23 @@ const StyledSlide = styled(Slider)`
     top: -10px;
   }
 
-  .slick-slider {
+  /* .slick-slider {
     display: flex;
-  }
+  } */
 
-  .slick-track {
+  /* .slick-track {
     display: flex;
     height: 100%;
-  }
+  } */
 
   .slick-dots {
     position: absolute;
     top: 200px;
-    /* display: none !important; */
+    display: none !important;
   }
 
   .slick-arrow {
-    transform: translate(-80px, 130px);
+    transform: translate(-80px, 330px);
     background-color: #aaaaaa;
     border-radius: 3px;
     cursor: pointer;

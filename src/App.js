@@ -10,17 +10,18 @@ import ManageMember from "./routes/ManageMember";
 import FinishProject from "./routes/FinishProject";
 import ReviewMember from "./routes/ReviewMember";
 import NewProfile from "./routes/NewProfile";
-import MyProject from "./routes/MyProject";
+import Main from "./routes/Main";
 import RecommendProject from "./routes/RecommendProject";
 import PasswordSearch from "./routes/PasswordSearch";
 import RecommendMember from "./routes/RecommendMember";
+import MyProject from "./routes/MyProject";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<MyProject />} />
+        <Route path="/" element={<Main />} />
         <Route path="/newProject" element={<NewProject />} />
         <Route path="/project" element={<Project />} />
         <Route path="/newProfile" element={<NewProfile />} />
@@ -33,6 +34,8 @@ function App() {
         <Route path="/recommend" element={<RecommendProject/>}/>
         <Route path="/passwd" element={<PasswordSearch/>}/>
         <Route path="/recmember" element={<RecommendMember/>}/>
+        <Route path="/myproject" element={<MyProject/>}/>
+        
       </Routes>
     </BrowserRouter>
   );

@@ -5,20 +5,13 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
-    const { 
-        register,
-        handleSubmit,
-        getValues,
-        watch,
-        formState:{errors},
-        setError,
-    } = useForm();
+    const { REACT_APP_API_URL: URL } = process.env;
 
+    const { register, handleSubmit, getValues, watch, formState:{errors}, setError } = useForm();
     const [isSend, setIsSend] = useState(false);
     const [authenticate, setAuthenticate] = useState(false);
     const [nickNameCheck, setNickNameCheck] = useState(false);
-    const [authCode, setAuthCode ] = useState("123456");
-
+    const [authCode, setAuthCode ] = useState("");
     const navigate = useNavigate();
 
     const onSubmit = (data) => {
@@ -37,7 +30,7 @@ const AuthPage = () => {
         }
         if(authenticate) {
             axios
-              .post('', {
+              .post('http://3.36.198.159:8080/api/register', {
                 userName: data.username,
                 nickName: data.nickname,
                 email: data.email,
@@ -45,7 +38,7 @@ const AuthPage = () => {
               })
               .then((res) => {
                 console.log(res);
-                navigate("/");
+                navigate("/login");
               })
               .catch((err) => {
                 console.log(err);
@@ -67,20 +60,16 @@ const AuthPage = () => {
             return;
         }
         try{
-            const res = await axios.post('',{
+            const res = await axios.post('http://3.36.198.159:8080/api/register/check-nickname',{
                 nickName : watch('nickname')
             });
-            const { result } = res.data;
-            if(result === "이미 사용중인 닉네임입니다"){
-                setError("nickname", { message: result });
-                setNickNameCheck(false);
-            }
-            else{
-                alert("사용가능한 닉네임입니다");
-                setNickNameCheck(true);
-            } 
+            alert("사용 가능한 닉네임입니다.");
+            setNickNameCheck(true);
+            console.log(res);
         }
         catch(err){
+            setError("nickname", { message : err.response.data });
+            setNickNameCheck(false);
             console.log(err);
         }
     };
@@ -94,14 +83,16 @@ const AuthPage = () => {
             return;
         }
         try{
-            const res = await axios.post('',{
+            const res = await axios.post('http://3.36.198.159:8080/api/register/check-email',{
                 email : watch('email')
             });
-            const { result } = res.data;
-            setAuthCode(result);
             setIsSend(true);
+            console.log(res.data);
+            setAuthCode(res.data);
         }
         catch(err){
+            setError("email", { message : err.response.data});
+            setIsSend(false);
             console.log(err);
         }
     };
@@ -114,7 +105,7 @@ const AuthPage = () => {
             setError('checknum',{message:"인증번호를 입력해주세요."});
             return;
         }
-        if(authCode !== watch('checknum')){
+        if(authCode !== parseInt(watch('checknum'))){
             setError('checknum',{message:"인증번호가 틀립니다."})
             setAuthenticate(false);
         }
@@ -175,8 +166,10 @@ const AuthPage = () => {
                             },
                         })}
                     />
+                    {/* <button style={{marginRight:"40px"}}onClick={emailcheck}>중복확인</button> */}
                     <button onClick={sendCheckNum}>인증</button>
                 </DoubleCheck>
+                {/* {emailCheck?<AlertMessage>사용가능한 이메일입니다.</AlertMessage>:<InputAlert isVisible={!!errors.email}>{errors.email?.message}</InputAlert>} */}
                 {isSend?<AlertMessage>입력하신 이메일로 인증번호를 전송했습니다.</AlertMessage>:<InputAlert isVisible={!!errors.email}>{errors.email?.message}</InputAlert>}
                 </div>
 

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from "styled-components";
+import axios from 'axios';
+import { loginState, tokenState } from '../components/atom';
+import { useRecoilState } from "recoil";
 
 const LoginPage = () => {
   const {
@@ -9,19 +12,34 @@ const LoginPage = () => {
     handleSubmit,
     formState:{errors},
   } = useForm();
-
+  const [accessToken, setAcessToken] = useRecoilState(tokenState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
   const navigate = useNavigate();
 
   const gotoSearchPW =() =>{
     navigate('/passwd');
   }
-
   const gotoAuth =() =>{
     navigate('/auth');
   }
-  const onSubmit = data => {
+ 
+  const onSubmit = async(data) => {
     console.log(data);
-  
+    try{
+      const res = await axios.post('http://3.36.198.159:8080/api/login',{
+        email : data.email,
+        password : data.password,
+      });
+      console.log(res);
+      localStorage.setItem("accessToken", res.data);
+      setAcessToken(res.data);
+      setIsLogin(true);
+      navigate('/');
+    }
+    catch(err){
+      console.log(err);
+      alert("로그인에 실패했습니다. 다시 입력해주세요.");
+    }
   };
 
   return (
