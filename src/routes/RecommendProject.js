@@ -1,19 +1,33 @@
 import React from 'react';
 import styled from "styled-components";
-import { FaSearch } from "react-icons/fa";
-import SelectBox from '../component/SelectBox';
-import { selectData } from "../ProjectSearchData" ;
 import ProjectCard from '../component/ProjectCard';
 import StyledSlide from '../style/StyledSlide';
+import Select from "react-select";
+import {
+  levelOptionState,
+  positionOptionState,
+  techOptionState,
+} from "../components/atom";
+import { useRecoilValue } from "recoil";
+import { useState } from 'react';
 
 const RecommendProject = () => {
+    const positionOption = useRecoilValue(positionOptionState);
+    const techOption = useRecoilValue(techOptionState);
+    const levelOption = useRecoilValue(levelOptionState);
+
+    const [positions, setPositions] = useState([]);
+    const [techs, setTechs] = useState([]);
+    const [level, setLevel] = useState([]);
+
     const settings = {
         slide: <ProjectCard />,
         infinite: true,
         speed: 500,
         arrows: true,
-        autoplay: false,
-        autoplaySpeed: 2000,
+        dots: true,
+        // autoplay: false,
+        // autoplaySpeed: 2000,
         slidesToShow: 3,
         slidesToScroll: 3,
         rows: 3,
@@ -24,18 +38,31 @@ const RecommendProject = () => {
 
   return (
     <Wrapper>
-        {/* <SearchArea>
-            <Input type='text'/>
-            <SearchIcon><FaSearch/></SearchIcon>
-        </SearchArea> */}
         <Filter>추천 검색 필터</Filter>
         <SelectArea>
-            <SelectBox content={selectData.recruitment} title={"모집 분야"}/>
-            <SelectBox content={selectData.technique} title={"기술 스택"}/>
-            <SelectBox content={selectData.proficiency} title={"등급"}/>
+            <CategorySelect
+                onChange={(selectOptions) => 
+                    setPositions(selectOptions.map((option) => option.value))}
+                options={positionOption}
+                placeholder="모집 분야"
+                isMulti/>
+            <CategorySelect
+                onChange={(selectOptions) => 
+                    setTechs(selectOptions.map((option) => option.value))}
+                options={techOption}
+                placeholder="기술 스택"
+                isMulti/>
+            <CategorySelect
+                onChange={(selectOptions) => 
+                    setLevel(selectOptions.map((option) => option.value))}
+                options={levelOption}
+                placeholder="숙련도"
+                isMulti/>
         </SelectArea>
-        <Text>추천 프로젝트</Text>
+
+        
         <ProjectWrapper>
+        <Text>추천 프로젝트</Text>
             <CardWrapper>
                 <StyledSlide {...settings}>
                     <ProjectCard/>
@@ -77,47 +104,28 @@ const Filter = styled.div`
     top: 10px;
     left: 140px;
 `;
-const SearchArea = styled.div`
-
-`;
-const Input = styled.input`
-    width: 600px;
-    height: 20px;
-    padding: 10px 0 10px 20px;
-    border: none;
-    border-radius: 30px;
-    background-color: #c8c8c8;
-    font-size: 18px;
-`;
-const SearchIcon = styled.span`
-    position: absolute;
-    top: 11px;
-    right: 320px;
+const CategorySelect = styled(Select)`
+    width: 260px;
+    margin-right: 50px;
 `;
 const SelectArea = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     position: absolute;
     top: 50px;
     left: 140px;
 `;
 const Text = styled.div`
-    position: absolute;
-    top: 270px;
-    left: 140px;
+    margin: 0 900px 40px 0;
     font-size: 20px;
     font-weight: bold;
 `;
 const ProjectWrapper = styled.div`
     position: absolute;
-    top: 330px;
+    top: 180px;
     left: 140px;
 `;
 const CardWrapper = styled.div`
-    /* display: grid;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(3,1fr);
-    gap: 35px; */
     margin-bottom: 40px;
 `;
 export default RecommendProject
