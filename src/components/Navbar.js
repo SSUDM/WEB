@@ -2,7 +2,8 @@ import styled from "styled-components";
 import React from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-
+import { useRecoilValue } from "recoil";
+import { loginState } from "./atom";
 const NavbarStyle = styled.header`
   display: flex;
   flex-direction: row;
@@ -63,6 +64,7 @@ const CreateProject = styled.button`
 `;
 
 const Navbar = () => {
+  const isLogin = useRecoilValue(loginState);
   const navigate = useNavigate();
   const goToLogin = () => {
     navigate("/login");
@@ -82,7 +84,7 @@ const Navbar = () => {
       </RightContainer>
 
       <LeftContainer>
-        <Login onClick={goToLogin}>로그인</Login>
+        {isLogin?<Login>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
         <FaCircleUser size={18} />
         <CreateProject>+프로젝트 생성</CreateProject>
       </LeftContainer>
