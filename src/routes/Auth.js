@@ -5,8 +5,6 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
-    const { REACT_APP_API_URL: URL } = process.env;
-
     const { register, handleSubmit, getValues, watch, formState:{errors}, setError } = useForm();
     const [isSend, setIsSend] = useState(false);
     const [authenticate, setAuthenticate] = useState(false);
@@ -30,7 +28,7 @@ const AuthPage = () => {
         }
         if(authenticate) {
             axios
-              .post('http://3.36.198.159:8080/api/register', {
+              .post(`${process.env.REACT_APP_API_URL}/api/register`, {
                 userName: data.username,
                 nickName: data.nickname,
                 email: data.email,
@@ -60,7 +58,7 @@ const AuthPage = () => {
             return;
         }
         try{
-            const res = await axios.post('http://3.36.198.159:8080/api/register/check-nickname',{
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/register/check-nickname`,{
                 nickName : watch('nickname')
             });
             alert("사용 가능한 닉네임입니다.");
@@ -83,7 +81,7 @@ const AuthPage = () => {
             return;
         }
         try{
-            const res = await axios.post('http://3.36.198.159:8080/api/register/check-email',{
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/register/check-email`,{
                 email : watch('email')
             });
             setIsSend(true);

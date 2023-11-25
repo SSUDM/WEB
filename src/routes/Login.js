@@ -26,7 +26,7 @@ const LoginPage = () => {
   const onSubmit = async(data) => {
     console.log(data);
     try{
-      const res = await axios.post('http://3.36.198.159:8080/api/login',{
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`,{
         email : data.email,
         password : data.password,
       });
