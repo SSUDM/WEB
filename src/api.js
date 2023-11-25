@@ -69,3 +69,47 @@ export const getResume = async (memberId) => {
     uid: 1,
   };
 };
+
+export const getMembers = async () => {
+  /*
+    try {
+      const response = await axios.get(`api-address`);
+  
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }*/
+  return [
+    {
+      userName: "JohnDoe",
+      introduction: "hello~",
+    },
+    {
+      userName: "mira",
+      introduction: "good luck.",
+    },
+  ];
+};
+
+export const getApplicants = async () => {
+  /*
+    try {
+      const response = await axios.get(`api-address`);
+  
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }*/
+  return [
+    {
+      userName: "JohnDoe",
+      introduction: "hello~",
+    },
+    {
+      userName: "mira",
+      introduction: "good luck.",
+    },
+  ];
+};

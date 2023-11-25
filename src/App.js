@@ -14,6 +14,7 @@ import MyProject from "./routes/MyProject";
 import RecommendProject from "./routes/RecommendProject";
 import PasswordSearch from "./routes/PasswordSearch";
 import RecommendMember from "./routes/RecommendMember";
+import EditProject from "./routes/EditProject";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MyProject />} />
         <Route path="/newProject" element={<NewProject />} />
+        <Route path="/editProject" element={<EditProject />} />
         <Route path="/project" element={<Project />} />
         <Route path="/newProfile" element={<NewProfile />} />
         <Route path="/profile" element={<Profile />} />
@@ -30,9 +32,9 @@ function App() {
         <Route path="/manageMember" element={<ManageMember />} />
         <Route path="/finishProject" element={<FinishProject />} />
         <Route path="/reviewMember" element={<ReviewMember />} />
-        <Route path="/recommend" element={<RecommendProject/>}/>
-        <Route path="/passwd" element={<PasswordSearch/>}/>
-        <Route path="/recmember" element={<RecommendMember/>}/>
+        <Route path="/recommend" element={<RecommendProject />} />
+        <Route path="/passwd" element={<PasswordSearch />} />
+        <Route path="/recmember" element={<RecommendMember />} />
       </Routes>
     </BrowserRouter>
   );
