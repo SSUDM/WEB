@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import ProjectCard from '../component/ProjectCard';
+import ProjectCard from '../components/ProjectCard';
 import Slider from "react-slick";
 import axios from 'axios';
 import { useEffect, useState } from 'react';

@@ -1,5 +1,5 @@
 import React from 'react';
-import MemberCard from '../component/MemberCard';
+import MemberCard from '../components/MemberCard';
 import styled from 'styled-components';
 import Select from "react-select";
 import {
