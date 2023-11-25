@@ -14,6 +14,7 @@ import Main from "./routes/Main";
 import RecommendProject from "./routes/RecommendProject";
 import PasswordSearch from "./routes/PasswordSearch";
 import RecommendMember from "./routes/RecommendMember";
+import EditProject from "./routes/EditProject";
 import MyProject from "./routes/MyProject";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/newProject" element={<NewProject />} />
+        <Route path="/editProject" element={<EditProject />} />
         <Route path="/project" element={<Project />} />
         <Route path="/newProfile" element={<NewProfile />} />
         <Route path="/profile" element={<Profile />} />
@@ -35,7 +37,6 @@ function App() {
         <Route path="/passwd" element={<PasswordSearch/>}/>
         <Route path="/recmember" element={<RecommendMember/>}/>
         <Route path="/myproject" element={<MyProject/>}/>
-        
       </Routes>
     </BrowserRouter>
   );

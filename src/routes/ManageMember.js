@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { getApplicants, getMembers } from "../api";
+import { useQuery } from "react-query";
 
 const Container = styled.div`
   display: flex;
@@ -106,68 +108,76 @@ const DenyBtn = styled.button`
 `;
 
 const ManageMember = () => {
+  const { data: members } = useQuery({
+    queryKey: ["members"],
+    queryFn: () => getMembers(),
+  });
+
+  const { data: applicants } = useQuery({
+    queryKey: ["applicants"],
+    queryFn: () => getApplicants(),
+  });
+
+  const onAccept = () => {
+    /*
+    try {
+      const response = await axios.get(`api-address`);
+  
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }*/
+    console.log("수락되었습니다.");
+  };
+
+  const onDeny = () => {
+    /*
+    try {
+      const response = await axios.get(`api-address`);
+  
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }*/
+    console.log("거절되었습니다.");
+  };
+
   return (
     <Container>
-      <Title>팀원 관리</Title>
+      <Title>캡스톤 디자인1 > 팀원 관리</Title>
       <CardsContainer>
         <Name>팀원</Name>
         <Cards>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-          </Card>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-          </Card>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-          </Card>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-          </Card>
+          {members?.map((data) => (
+            <Card>
+              <User>
+                <CardImg />
+                <span>{data?.userName}</span>
+              </User>
+              <span>{data?.introduction}</span>
+            </Card>
+          ))}
         </Cards>
       </CardsContainer>
       <Border />
       <CardsContainer>
         <Name>지원자</Name>
         <Cards>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-            <Buttons>
-              <AcceptBtn>수락</AcceptBtn>
-              <DenyBtn>거절</DenyBtn>
-            </Buttons>
-          </Card>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-            <Buttons>
-              <AcceptBtn>수락</AcceptBtn>
-              <DenyBtn>거절</DenyBtn>
-            </Buttons>
-          </Card>
+          {applicants?.map((data) => (
+            <Card>
+              <User>
+                <CardImg />
+                <span>{data?.userName}</span>
+              </User>
+              <span>{data?.introduction}</span>
+              <Buttons>
+                <AcceptBtn onClick={onAccept}>수락</AcceptBtn>
+                <DenyBtn onClick={onDeny}>거절</DenyBtn>
+              </Buttons>
+            </Card>
+          ))}
         </Cards>
       </CardsContainer>
     </Container>

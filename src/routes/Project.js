@@ -158,6 +158,14 @@ const Recommend = styled.div`
     font-size: 18px;
     margin-bottom: 30px;
   }
+  span {
+    margin-top: 20px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.3);
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
 `;
 
 const UserCards = styled.div`
@@ -184,7 +192,7 @@ const CardUser = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  span {
+  h2 {
     font-size: 15px;
     font-weight: 700;
   }
@@ -266,12 +274,17 @@ const Project = () => {
               >
                 <li>팀원 관리</li>
               </Link>
-              <li>프로젝트 수정</li>
+              <Link
+                to={"/editProject"}
+                style={{ textDecorationLine: "none", color: "black" }}
+              >
+                <li>프로젝트 수정</li>
+              </Link>
               <li onClick={onConfirm}>프로젝트 종료</li>
             </DropDown>
           )}
         </Menu>
-      )}
+      )}   
       <ProjectImg
         src={
           project?.projectImg ? project?.projectImg : "../../img/project.jpg"
@@ -344,13 +357,19 @@ const Project = () => {
                           : "../../img/default_profile.png"
                       }
                     />
-                    <span>{member?.name}</span>
+                    <h2>{member?.name}</h2>
                   </CardUser>
                   <div>{member?.intorduction}</div>
                 </UserCard>
               </Link>
             ))}
           </UserCards>
+          <Link
+            to="/recMember"
+            style={{ textDecoration: "underline rgba(0, 0, 0, 0.3)" }}
+          >
+            <span>자세히 보기</span>
+          </Link>
         </Recommend>
       ) : (
         <Button isApplied={isApplied} onClick={onApply}>
