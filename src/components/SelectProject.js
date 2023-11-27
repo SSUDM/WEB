@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import Select from "react-select";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { getMyProject } from "../api";
+import { useQuery } from "react-query";
 
 const Container = styled.div`
   display: flex;
@@ -48,54 +51,50 @@ const Button = styled.button`
 `;
 
 const SelectProject = ({ setIsOpen }) => {
-  const [myProjects, setMyProjects] = useState([]);
+  const [myProjectsOptions, setMyProjectsOptions] = useState([]);
   const [project, setProject] = useState("");
-
-  /*
-  try {
-    const response = axios.get(`api-address`);
-    formatMyPorjects(response.data);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-  */
+  const { data: myproject } = useQuery({
+    queryKey: ["myproject"],
+    queryFn: () => getMyProject(),
+  });
 
   const onDelete = () => {
     setIsOpen(false);
   };
 
-  const formatMyPorjects = (array) => {
-    setMyProjects(
-      array.map((item) => ({
-        value: item,
-        label: item,
-      }))
-    );
+  const formatMyProjectsOption = (id, title) => {
+    return {
+      value: id,
+      label: title,
+    };
   };
 
   const onSubmit = async () => {
     /*
-    try {
-      if (selectedProject) {
-        const response = await axios.post("api-address", {
-          selectedProject: project.value,
-        });
+    if (project) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/project/${project.value}/suggest-project`
+        );
         console.log(response.data);
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-    */
-    console.log(project.value);
+      
+      setIsOpen(false);
+    }*/
+
     setIsOpen(false);
   };
 
   useEffect(() => {
-    const test = ["캡스톤 디자인", "운영체제"];
-    formatMyPorjects(test);
-  }, []);
+    if (myproject) {
+      const formattedOptions = myproject.map((data) =>
+        formatMyProjectsOption(data?.pid, data?.title)
+      );
+      setMyProjectsOptions(formattedOptions);
+    }
+  }, [myproject]);
 
   return (
     <Container>
@@ -120,7 +119,7 @@ const SelectProject = ({ setIsOpen }) => {
       <Options
         onChange={(data) => setProject(data)}
         style={{ width: "300px" }}
-        options={myProjects}
+        options={myProjectsOptions}
       />
       <Button onClick={onSubmit}>확인</Button>
     </Container>

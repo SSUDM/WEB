@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { getApplicants, getMembers } from "../api";
 import { useQuery } from "react-query";
+import { Link, useParams } from "react-router-dom";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const Container = styled.div`
   display: flex;
@@ -108,6 +110,8 @@ const DenyBtn = styled.button`
 `;
 
 const ManageMember = () => {
+  const { projectId } = useParams();
+  const userId = 1;
   const { data: members } = useQuery({
     queryKey: ["members"],
     queryFn: () => getMembers(),
@@ -119,45 +123,72 @@ const ManageMember = () => {
   });
 
   const onAccept = () => {
-    /*
+    if (window.confirm("요청을 수락하시겠습니까?")) {
+      /*
     try {
-      const response = await axios.get(`api-address`);
-  
-      return response.data;
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/project/${projectId}/accept-join-project`
+      );
+      console.log(response.data);
     } catch (error) {
       console.error(error);
       throw error;
     }*/
-    console.log("수락되었습니다.");
+      console.log("수락되었습니다.");
+    } else {
+      console.log("요청 수락 취소");
+    }
   };
 
   const onDeny = () => {
-    /*
+    if (window.confirm("요청을 거절하시겠습니까?")) {
+      /*
     try {
-      const response = await axios.get(`api-address`);
-  
-      return response.data;
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/project/{pId}/reject-join-project`
+      );
+      console.log(response.data);
     } catch (error) {
       console.error(error);
       throw error;
     }*/
-    console.log("거절되었습니다.");
+      console.log("거절되었습니다.");
+    } else {
+      console.log("요청 거절 취소");
+    }
   };
 
   return (
     <Container>
-      <Title>캡스톤 디자인1 > 팀원 관리</Title>
+      <Title>
+        <Link
+          to={`/project/${projectId}`}
+          style={{
+            marginRight: "10px",
+            textDecorationLine: "none",
+            color: "black",
+          }}
+        >
+          <IoMdArrowRoundBack />
+        </Link>
+        팀원 관리
+      </Title>
       <CardsContainer>
         <Name>팀원</Name>
         <Cards>
           {members?.map((data) => (
-            <Card>
-              <User>
-                <CardImg />
-                <span>{data?.userName}</span>
-              </User>
-              <span>{data?.introduction}</span>
-            </Card>
+            <Link
+              to={`/profile/${userId}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <Card>
+                <User>
+                  <CardImg />
+                  <span>{data?.nickName}</span>
+                </User>
+                <span>{data?.introduction}</span>
+              </Card>
+            </Link>
           ))}
         </Cards>
       </CardsContainer>
@@ -166,17 +197,22 @@ const ManageMember = () => {
         <Name>지원자</Name>
         <Cards>
           {applicants?.map((data) => (
-            <Card>
-              <User>
-                <CardImg />
-                <span>{data?.userName}</span>
-              </User>
-              <span>{data?.introduction}</span>
-              <Buttons>
-                <AcceptBtn onClick={onAccept}>수락</AcceptBtn>
-                <DenyBtn onClick={onDeny}>거절</DenyBtn>
-              </Buttons>
-            </Card>
+            <Link
+              to={`/profile/${userId}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <Card>
+                <User>
+                  <CardImg />
+                  <span>{data?.nickName}</span>
+                </User>
+                <span>{data?.introduction}</span>
+                <Buttons>
+                  <AcceptBtn onClick={onAccept}>수락</AcceptBtn>
+                  <DenyBtn onClick={onDeny}>거절</DenyBtn>
+                </Buttons>
+              </Card>
+            </Link>
           ))}
         </Cards>
       </CardsContainer>
