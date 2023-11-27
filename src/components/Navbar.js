@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaCircleUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { loginState } from "./atom";
+
 const NavbarStyle = styled.header`
   display: flex;
   flex-direction: row;
@@ -84,9 +86,15 @@ const Navbar = () => {
       </RightContainer>
 
       <LeftContainer>
-        {isLogin?<Login>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
+        {isLogin ? (
+          <Login>환영합니다!</Login>
+        ) : (
+          <Login onClick={goToLogin}>로그인</Login>
+        )}
         <FaCircleUser size={18} />
-        <CreateProject>+프로젝트 생성</CreateProject>
+        <Link to="/newProject">
+          <CreateProject>+프로젝트 생성</CreateProject>
+        </Link>
       </LeftContainer>
     </NavbarStyle>
   );

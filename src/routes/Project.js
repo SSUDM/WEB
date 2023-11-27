@@ -1,9 +1,7 @@
-import { useRecoilValue } from "recoil";
-import { isProjectOwnerState } from "../components/atom";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { getProject, getRecommendedMembers } from "../api";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
 import axios from "axios";
@@ -207,55 +205,58 @@ const CardImg = styled.img`
 `;
 
 const Project = () => {
-  const isProjectOwner = useRecoilValue(isProjectOwnerState);
-  const memberId = 1;
-  const projectId = 1;
+  const userId = 1;
+  const { projectId } = useParams();
   const isApplied = false;
   const [view, setView] = useState(false);
   const navigate = useNavigate();
+  const isOwner = false;
 
   const { data: project } = useQuery({
     queryKey: ["project"],
-    queryFn: () => getProject(memberId.toString(), projectId.toString()),
+    queryFn: () => getProject(projectId.toString()),
   });
 
   const { data: recommandedMembers } = useQuery({
     queryKey: ["recommandedMembers"],
-    queryFn: () =>
-      getRecommendedMembers(memberId.toString(), projectId.toString()),
+    queryFn: () => getRecommendedMembers(projectId.toString()),
   });
 
   const onApply = () => {
-    try {
-      /*
+    if (window.confirm("프로젝트에 지원하시겠습니까?")) {
+      try {
+        /*
       const res = await axios({
         method: "post",
-        url: `api-address`,
+        url: `${process.env.REACT_APP_API_URL}/api/project/${projectId}/apply`,
       });
-
       console.log(res);
       */
+        console.log("지원 성공");
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log("지원 취소");
+    }
+  };
+
+  const onFinish = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/project/${projectId}/terminate`
+      );
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const deleteProject = async () => {
-    /*
-    try {
-      const response = await axios.delete(`/api/projects/${projectId}`);
-      console.log(response.data);
-    } catch (error) {
-      console.error("프로젝트 삭제 오류:", error);
-    }
-    */
-  };
-
   const onConfirm = () => {
     if (window.confirm("프로젝트를 종료하시겠습니까?")) {
       console.log("프로젝트 종료");
-      deleteProject();
-      // navigate("내 프로젝트로");
+      onFinish();
+      navigate(`/finishProject/${projectId}`);
     } else {
       console.log("프로젝트 종료 취소");
     }
@@ -263,13 +264,13 @@ const Project = () => {
 
   return (
     <Container>
-      {isProjectOwner && (
+      {isOwner && (
         <Menu onClick={() => setView(!view)}>
           <IoMenu />
           {view && (
             <DropDown>
               <Link
-                to={"/manageMember"}
+                to={`/project/${projectId}/manageMember`}
                 style={{ textDecorationLine: "none", color: "black" }}
               >
                 <li>팀원 관리</li>
@@ -284,7 +285,7 @@ const Project = () => {
             </DropDown>
           )}
         </Menu>
-      )}   
+      )}
       <ProjectImg
         src={
           project?.projectImg ? project?.projectImg : "../../img/project.jpg"
@@ -294,12 +295,12 @@ const Project = () => {
       <User>
         <UserImg
           src={
-            project?.userImg
-              ? project?.userImg
+            project?.articleOwnerImg
+              ? project?.articleOwnerImg
               : "../../img/default_profile.png"
           }
         />
-        <span>김OO</span>
+        <span>{project?.articleOwnerNickName}</span>
       </User>
       <Info>
         <TagContainer>
@@ -312,7 +313,7 @@ const Project = () => {
         </TagContainer>
         <TagContainer>
           <h1>모집 인원</h1>
-          <span>1명</span>
+          <span>{project?.maximumMember}</span>
         </TagContainer>
         <TagContainer>
           <h1>기술 스택</h1>
@@ -324,28 +325,28 @@ const Project = () => {
         </TagContainer>
         <TagContainer>
           <h1>개발 기간</h1>
-          <span>1개월 미만</span>
+          <span>{project?.during}</span>
         </TagContainer>
         <TagContainer>
           <h1>모집 마감</h1>
-          <span>2000.00.00</span>
+          <span>{project?.due}</span>
         </TagContainer>
         <TagContainer>
           <h1>요구 숙련도</h1>
-          <Tag>초급</Tag>
+          <Tag>{project?.recLevel}</Tag>
         </TagContainer>
       </Info>
       <Description>
         <h1>프로젝트 소개</h1>
         <Contents>{project?.content}</Contents>
       </Description>
-      {isProjectOwner ? (
+      {isOwner ? (
         <Recommend>
           <h1>이런 팀원 어때요?</h1>
           <UserCards>
             {recommandedMembers?.map((member) => (
               <Link
-                to="/profile"
+                to={`/profile/${userId}`}
                 style={{ textDecorationLine: "none", color: "black" }}
               >
                 <UserCard>
