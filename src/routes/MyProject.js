@@ -5,7 +5,7 @@ import { ProjectActiveState } from '../components/atom';
 import axios from "axios";
 import styled from "styled-components";
 import Select from "react-select";
-import ProjectCard from '../component/ProjectCard';
+import ProjectCard from '../components/ProjectCard';
 
 const MyProject = () => {
   const projectactiveOption = useRecoilValue(ProjectActiveState);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from "styled-components";
@@ -12,7 +12,7 @@ const LoginPage = () => {
     handleSubmit,
     formState:{errors},
   } = useForm();
-  const [accessToken, setAcessToken] = useRecoilState(tokenState);
+  const [accessToken, setAccessToken] = useRecoilState(tokenState);
   const [isLogin, setIsLogin] = useRecoilState(loginState);
   const navigate = useNavigate();
 
@@ -24,15 +24,15 @@ const LoginPage = () => {
   }
  
   const onSubmit = async(data) => {
-    console.log(data);
+    // console.log(data);
     try{
-      const res = await axios.post('http://3.36.198.159:8080/api/login',{
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`,{
         email : data.email,
         password : data.password,
       });
-      console.log(res);
+      console.log(res.data);
       localStorage.setItem("accessToken", res.data);
-      setAcessToken(res.data);
+      setAccessToken(res.data);
       setIsLogin(true);
       navigate('/');
     }
@@ -112,7 +112,10 @@ const EmailInput = styled.input`
     border-radius: 10px;
     outline: none;
     opacity: 0.8;
-    background-color: #dcdcdc;
+    background-color: #C8E6C9;
+    &::placeholder{
+      color: #616161;
+    }
     &:focus {
     color: black;
     }
@@ -130,7 +133,7 @@ const LoginButton = styled.button`
     height: 40px;
     margin-left: 135px;
     margin-top: 40px;
-    background-color: #dcdcdc;
+    background-color: #81C784;
     border-radius: 30px;
     color: white;
     text-align: center;
@@ -138,7 +141,7 @@ const LoginButton = styled.button`
     outline: none;
     cursor: pointer;
     &:hover{
-    background-color: #d2d2d2;
+    background-color: #66BB6A;
     }
 `;
 const InputAlert = styled.span`
