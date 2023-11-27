@@ -1,4 +1,7 @@
 import { atom } from "recoil";
+import { recoilPersist } from 'recoil-persist';
+
+const { persistAtom } = recoilPersist();
 
 export const isProjectOwnerState = atom({
   key: "isProjectOwnerState",
@@ -80,6 +83,7 @@ export const tokenState = atom({
 export const loginState = atom({
   key: "loginState",
   default: false,
+  effects_UNSTABLE:[persistAtom],
 });
 
 export const ProjectActiveState = atom({
