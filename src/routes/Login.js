@@ -30,9 +30,9 @@ const LoginPage = () => {
         email : data.email,
         password : data.password,
       });
-      console.log(res.data);
-      localStorage.setItem("accessToken", res.data);
-      setAccessToken(res.data);
+      console.log(res.data.token);
+      localStorage.setItem("accessToken", res.data.token);
+      setAccessToken(res.data.token);
       setIsLogin(true);
       navigate('/');
     }
