@@ -113,3 +113,18 @@ export const getApplicants = async () => {
     },
   ];
 };
+
+export const getPopProject = async () =>{
+  try{
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/project/get-pop-projects`,{
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      }
+    });
+    console.log(response);
+    return response.data;
+  }
+  catch(err){
+    console.log(err);
+  }
+};

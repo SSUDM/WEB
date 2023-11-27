@@ -257,8 +257,11 @@ const Input = styled.input`
     border: none;
     border-radius: 10px;
     outline: none;
-    background-color: #dcdcdc;
+    background-color: #C8E6C9;
     opacity: 0.8;
+    &::placeholder{
+      color: #616161;
+    }
     &:focus {
         color: black;
     }
@@ -266,6 +269,7 @@ const Input = styled.input`
 const AuthInput = styled(Input).attrs({ type: 'password' })`
     &::placeholder {
         letter-spacing: 0px;
+        color: #616161;
     }
     letter-spacing: 5px;
 `;
@@ -273,9 +277,8 @@ const AuthButton = styled.button`
     display: block;
     width: 150px;
     height: 40px;
-    margin-left: 135px;
-    margin-top: 20px;
-    background-color: #dcdcdc;
+    margin: 20px 135px 50px 135px;
+    background-color: #81C784;
     border-radius: 30px;
     color: white;
     text-align: center;
@@ -283,7 +286,7 @@ const AuthButton = styled.button`
     outline: none;
     cursor: pointer;
     &:hover{
-        background-color: #d2d2d2;
+        background-color: #66BB6A;
     }
 `;
 const AlertMessage = styled.span`
@@ -307,7 +310,7 @@ const DoubleCheck = styled.div`
         border: none;
         border-radius: 10px;
         outline: none;
-        background-color: #dcdcdc;
+        background-color: #C8E6C9;
         opacity: 0.8;
         &:focus {
             color: black;
@@ -321,11 +324,11 @@ const DoubleCheck = styled.div`
         border: none;
         border-radius: 20px;
         color: white;
-        background-color: #969696;
+        background-color: #43A047;
         cursor: pointer;
         font-size: 12px;
         &:hover{
-            background-color: #aaaaaa;
+            background-color: #2E7D32;
         }
     }
 `;
