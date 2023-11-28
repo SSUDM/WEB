@@ -3,12 +3,13 @@ import React, { useEffect } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { loginState } from "./atom";
+import { loginState, nickNameState } from "./atom";
 
 const Navbar = () => {
   const isLogin = useRecoilValue(loginState);
-  console.log(isLogin);
+  const nickName = useRecoilValue(nickNameState);
   const navigate = useNavigate();
+
   const goToLogin = () => {
     navigate("/login");
   };
@@ -30,7 +31,7 @@ const Navbar = () => {
       </RightContainer>
 
       <LeftContainer>
-        {isLogin?<Login>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
+        {isLogin?<Login><span>{nickName}님!</span>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
         <FaCircleUser size={18} />
         <CreateProject>+프로젝트 생성</CreateProject>
       </LeftContainer>
@@ -77,6 +78,10 @@ const Menu = styled.p`
 const Login = styled.p`
   cursor: pointer;
   font-size: 14px;
+  span{
+    font-size: 16px;
+    font-weight: bold;
+  }
 `;
 
 const CreateProject = styled.button`

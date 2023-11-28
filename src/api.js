@@ -121,7 +121,7 @@ export const getPopProject = async () =>{
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
       }
     });
-    console.log(response);
+    console.log(response.data);
     return response.data;
   }
   catch(err){

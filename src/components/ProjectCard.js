@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import {ReactComponent as Heart} from "../Img/WishHeart.svg";
 import axios from 'axios';
 
-const ProjectCard = ({data}) => {
+const ProjectCard = ({option}) => {
     const [isWished, setIsWished] = useState(false);
-    console.log(data);
+    console.log(option);
     const wishHandler = async() =>{
         try{
             if(isWished == false){
@@ -27,9 +27,9 @@ const ProjectCard = ({data}) => {
       
   return (
     <Card>
-        <StateMessage>{data&&data.projectStatus === "RECRUITING" ? "모집중":null}</StateMessage>
-        <ProjectImg src={data.projectImg} alt='대체이미지'/>
-        <Title>{data.title}</Title>
+        <StateMessage>{option&&option.projectStatus === "RECRUITING" ? "모집중":null}</StateMessage>
+        <ProjectImg src={option.projectImg} alt='대체이미지'/>
+        <Title>{option.title}</Title>
         <LikedButton onClick={wishHandler}>
             {isWished?<Heart width="20px" fill="red" stroke="red"/>:<Heart width="20px"/>}
         </LikedButton>
