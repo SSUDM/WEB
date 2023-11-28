@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { getMembers } from "../api";
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +23,7 @@ const SubTitle = styled.span`
   width: 800px;
   font-size: 14px;
   padding-left: 20px;
-  margin-bottom: 100px;
+  margin-bottom: 80px;
 `;
 
 const CardsContainer = styled.div`
@@ -95,7 +97,27 @@ const ReviewBtn = styled.button`
   margin-top: 18px;
 `;
 
+const Button = styled.button`
+  width: 120px;
+  height: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+  font-family: "Pretendard-Regular";
+  cursor: pointer;
+  margin-top: 50px;
+`;
+
 const FinishProject = () => {
+  const { projectId } = useParams();
+  const userId = 1;
+  const { data: members } = useQuery({
+    queryKey: ["members"],
+    queryFn: () => getMembers(projectId.toString()),
+  });
+
   return (
     <Container>
       <Title>프로젝트가 종료되었습니다.</Title>
@@ -105,42 +127,28 @@ const FinishProject = () => {
       <CardsContainer>
         <Name>팀원 평가하기</Name>
         <Cards>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-            <Link to="/reviewMember">
-              <ReviewBtn>평가 하기</ReviewBtn>
+          {members?.map((data) => (
+            <Link
+              to={`/profile/${userId}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <Card>
+                <User>
+                  <CardImg />
+                  <span>{data?.nickName}</span>
+                </User>
+                <span>{data?.introduction}</span>
+                <Link to="/reviewMember">
+                  <ReviewBtn>평가 하기</ReviewBtn>
+                </Link>
+              </Card>
             </Link>
-          </Card>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-            <ReviewBtn>평가 하기</ReviewBtn>
-          </Card>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-            <ReviewBtn>평가 하기</ReviewBtn>
-          </Card>
-          <Card>
-            <User>
-              <CardImg />
-              <span>이름</span>
-            </User>
-            <span>간단한 자기소개</span>
-            <ReviewBtn>평가 하기</ReviewBtn>
-          </Card>
+          ))}
         </Cards>
       </CardsContainer>
+      <Link to={"/"}>
+        <Button>메인으로</Button>
+      </Link>
     </Container>
   );
 };

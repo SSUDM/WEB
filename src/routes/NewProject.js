@@ -6,6 +6,7 @@ import {
   periodOptionState,
   positionOptionState,
   techOptionState,
+  tokenState,
 } from "../components/atom";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
@@ -148,22 +149,24 @@ const NewProject = () => {
   const techOption = useRecoilValue(techOptionState);
   const periodOption = useRecoilValue(periodOptionState);
   const levelOption = useRecoilValue(levelOptionState);
-
+  const [projectImg, setProjectImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
   const [title, setTitle] = useState("");
+  const [count, setCount] = useState(0);
   const [positions, setPositions] = useState([]);
   const [techs, setTechs] = useState("");
   const [period, setPeriod] = useState();
   const [endDate, setEndDate] = useState(null);
   const [level, setLevel] = useState("");
   const [content, setContent] = useState("");
+  const authToken = useRecoilValue(tokenState);
 
   const navigate = useNavigate();
 
   const insertImg = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setPreviewImg(file);
+      setProjectImg(file);
       let reader = new FileReader();
       reader.onload = () => {
         const fileURL = reader.result;
@@ -176,32 +179,33 @@ const NewProject = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("projectImg", previewImg);
     formData.append("title", title);
-    formData.append("positions", positions);
-    formData.append("techs", techs);
-    formData.append("period", period);
-    formData.append("endDate", endDate);
-    formData.append("level", level);
+    formData.append("maximumMember", count);
+    formData.append("projectImg", projectImg);
+    formData.append("recPart", positions);
+    formData.append("recTech", techs);
+    formData.append("recLevel", level);
+    formData.append("during", period);
+    formData.append("due", endDate);
     formData.append("content", content);
 
     console.log(JSON.stringify([...formData.entries()]));
-    /*
+
     try {
       const res = await axios({
         method: "post",
-        url: `api-address`,
+        url: `${process.env.REACT_APP_API_URL}/api/articles`,
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authToken}`,
         },
         data: formData,
       });
-
       console.log(res);
       // navigate("/project");
     } catch (error) {
       console.error(error);
-    }*/
+    }
   };
 
   return (
@@ -241,7 +245,11 @@ const NewProject = () => {
         </Tag>
         <Tag>
           <span>모집 인원</span>
-          <MemberCount type="number" min="0" />
+          <MemberCount
+            type="number"
+            min="0"
+            onChange={(e) => setCount(e.target.value)}
+          />
         </Tag>
         <Tag>
           <span>기술 스택</span>

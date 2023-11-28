@@ -6,9 +6,8 @@ import {
   levelOptionState,
   positionOptionState,
   techOptionState,
-  tokenState,
 } from "../components/atom";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { IoIosClose } from "react-icons/io";
 
@@ -322,12 +321,11 @@ const ProjectBox = styled.div`
   }
 `;
 
-const NewProfile = () => {
+const EditProfile = () => {
   const positionOption = useRecoilValue(positionOptionState);
   const levelOption = useRecoilValue(levelOptionState);
   const techOption = useRecoilValue(techOptionState);
-  const [userImg, setUserImg] = useState(null);
-  const [previewImg, setPreviewImg] = useState(null);
+  const [userImg, setUserImg] = useState();
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [level, setLevel] = useState("");
@@ -340,9 +338,7 @@ const NewProfile = () => {
   const [projects, setProjects] = useState([]);
   const [title, setTitle] = useState();
   const [project, setProject] = useState();
-  const authToken = useRecoilValue(tokenState);
-  const myuid = 1;
-  const navigate = useNavigate();
+  const [resumeRequest, setResumeRequest] = useState();
 
   const insertImg = (e) => {
     const file = e.target.files[0];
@@ -351,7 +347,7 @@ const NewProfile = () => {
       let reader = new FileReader();
       reader.onload = () => {
         const fileURL = reader.result;
-        setPreviewImg(fileURL);
+        setUserImg(fileURL);
       };
       reader.readAsDataURL(file);
     }
@@ -365,17 +361,10 @@ const NewProfile = () => {
     formData.append("level", level);
     formData.append("tech", techs);
     formData.append("introduction", introduction);
-    careers.forEach((data, index) => {
-      formData.append(`careerList[${index}].cid`, data.cid);
-      formData.append(`careerList[${index}].startDate`, data.startDate);
-      formData.append(`careerList[${index}].endDate`, data.endDate);
-      formData.append(`careerList[${index}].career`, data.career);
-    });
-    projects.forEach((data, index) => {
-      formData.append(`history[${index}].id`, data.id);
-      formData.append(`history[${index}].title`, data.title);
-      formData.append(`history[${index}].content`, data.content);
-    });
+    formData.append("careerList", careers);
+    formData.append("history", projects);
+
+    console.log(JSON.stringify([...formData.entries()]));
 
     try {
       const res = await axios({
@@ -383,13 +372,12 @@ const NewProfile = () => {
         url: `${process.env.REACT_APP_API_URL}/api/resume`,
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${authToken}`,
         },
         data: formData,
       });
 
       console.log(res);
-      navigate(`/profile/${myuid}`);
+      // navigate("/project");
     } catch (error) {
       console.error(error);
     }
@@ -416,6 +404,7 @@ const NewProfile = () => {
         .filter((item) => item.id !== id)
         .map((item, index) => ({ ...item, id: index + 1 }))
     );
+    console.log(id);
   };
 
   const addProject = () => {
@@ -424,7 +413,7 @@ const NewProfile = () => {
       projects.concat({
         id: projects.length + 1,
         title: title,
-        content: project,
+        project: project,
       })
     );
     setTitle("");
@@ -444,9 +433,7 @@ const NewProfile = () => {
     <Container>
       <UserInfoContainer>
         <label for="file">
-          <UserImg
-            src={previewImg ? previewImg : "../../img/default_profile.png"}
-          />
+          <UserImg src={userImg ? userImg : "../../img/default_profile.png"} />
         </label>
         <input
           type="file"
@@ -556,7 +543,7 @@ const NewProfile = () => {
             <ProjectBox>
               <IoIosClose onClick={() => deleteProject(data.id)} />
               <h1>{data.title}</h1>
-              <span>{data.content}</span>
+              <span>{data.project}</span>
             </ProjectBox>
           ))}
         </ViewProjects>
@@ -565,4 +552,4 @@ const NewProfile = () => {
     </Container>
   );
 };
-export default NewProfile;
+export default EditProfile;

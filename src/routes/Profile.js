@@ -3,6 +3,7 @@ import SelectProject from "../components/SelectProject";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { getResume } from "../api";
+import { Link, useParams } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -162,14 +163,12 @@ const Button = styled.button`
   border: none;
   border-radius: 20px;
   color: black;
-  background-color: ${({ isRequested }) =>
-    isRequested ? "rgba(0, 0, 0, 0.2)" : "#FFCAD5"};
+  background-color: rgba(0, 0, 0, 0.2);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   font-family: "Pretendard-Regular";
   margin-top: 85px;
-  display: ${({ isRequested }) => (isRequested ? "block" : "inline-block")};
 `;
 
 const ModalContainer = styled.div`
@@ -183,17 +182,16 @@ const ModalContainer = styled.div`
 `;
 
 const Profile = () => {
-  const memberId = 1;
+  const { userId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-  const [isRequested, setIsRequested] = useState(false);
   const isOwner = false;
 
   const { data: resume } = useQuery({
     queryKey: ["resume"],
-    queryFn: () => getResume(memberId),
+    queryFn: () => getResume(userId.toString()),
   });
 
-  const onRequest = () => {
+  const openModal = () => {
     setIsOpen(true);
   };
 
@@ -236,7 +234,7 @@ const Profile = () => {
       <TechStack>
         <h1>기술 스택</h1>
         <Techs>
-          {resume?.tech.split(",").map((data) => (
+          {resume?.tech.map((data) => (
             <Tech>
               <span>{data}</span>
             </Tech>
@@ -247,24 +245,32 @@ const Profile = () => {
       <Career>
         <h1>경력</h1>
         <CareerInfos>
-          <CareerInfo>
-            <Date>2000.00.00 - 2000.00.00</Date>
-            <span>숭실대학교 졸업</span>
-          </CareerInfo>
+          {resume?.careerList.map((data) => (
+            <CareerInfo>
+              <Date>
+                {data?.startDate} - {data?.endDate}
+              </Date>
+              <span>{data?.content}</span>
+            </CareerInfo>
+          ))}
         </CareerInfos>
       </Career>
       <Border />
       <Projects>
         <h1>프로젝트</h1>
-        <Project>
-          <h1>캡스톤 디자인 1</h1>
-          <span>숭실대 프로젝트 과목</span>
-        </Project>
+        {resume?.history.map((data) => (
+          <Project>
+            <h1>{data?.title}</h1>
+            <span>{data?.content}</span>
+          </Project>
+        ))}
       </Projects>
-      {isOwner ? null : (
-        <Button isRequested={isRequested} onClick={onRequest}>
-          협업 요청하기
-        </Button>
+      {isOwner ? (
+        <Link to={`/editProfile`}>
+          <Button>이력서 수정하기</Button>
+        </Link>
+      ) : (
+        <Button onClick={openModal}>협업 요청하기</Button>
       )}
     </Container>
   );
