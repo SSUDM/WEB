@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import ProjectCard from '../components/ProjectCard';
 import Slider from "react-slick";
-// import axios from 'axios';
-import { useRecoilValue } from "recoil";
-import { tokenState } from '../components/atom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { getPopProject } from '../api';
-import axios from 'axios';
+
 
 const Main = () => {
     const settings = {
@@ -19,37 +16,21 @@ const Main = () => {
         slidesToScroll: 3,
         slidesToShow: 3,
         rows: 2,
-        lazyLoad : 'ondemand',
-        variableWidth: true,
+        // variableWidth: true,
         centerPadding: '10px',
       };
-    const [loading, setLoading] = useState(false) //추후 로딩 다시 수정해야함;
-    const [list, setList] = useState([]);
-    const accessToken = useRecoilValue(tokenState);
+    const { isLoading, data:popproject } = useQuery({
+        queryKey: ["popproject"],
+        queryFn: ()=> getPopProject(),
+        refetchOnWindowFocus: false,
+    });
 
-    // const { data: popproject } = useQuery({
-    //     queryKey: ["popproject"],
-    //     queryFn: ()=> getPopProject(),
-    // });
-
-    const popdata = async() =>{
-        try{
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/project/get-pop-projects`,{
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                }
-            });
-            console.log(res.data);
-            setList(res.data);
-        }
-        catch(err){
-            console.log(err);
-        }
-    }
     useEffect(()=>{
-        popdata();
-    },[])
-    if(loading) {
+        // popdata();
+        console.log(popproject);
+    },[popproject])
+
+    if(isLoading) {
         return (
             <>
                 <AD/>
@@ -65,15 +46,14 @@ const Main = () => {
                 <h3>인기 프로젝트</h3>
                 <CardWrapper>
                     <PopularSlide {...settings}>
-                      {list&&list.map((data)=>(
-                        <ProjectCard key={data.id} data={data}/>
-                      ))}
+                      {popproject&&popproject.map((option)=>{
+                        <ProjectCard option={option}/>
+                      })}
                     </PopularSlide>
                 </CardWrapper>
             </ProjectWrapper>
         </Container>
     </>
-
   )
 }
 const PopularSlide = styled(Slider)`

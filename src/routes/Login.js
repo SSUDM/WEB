@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from "styled-components";
 import axios from 'axios';
-import { loginState, tokenState } from '../components/atom';
+import { tokenState, loginState, nickNameState, userIdState } from '../components/atom';
 import { useRecoilState } from "recoil";
 
 const LoginPage = () => {
@@ -14,6 +14,8 @@ const LoginPage = () => {
   } = useForm();
   const [accessToken, setAccessToken] = useRecoilState(tokenState);
   const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const [userID, setUserID] = useRecoilState(userIdState);
+  const [userNickName, setUserNickName] = useRecoilState(nickNameState);
   const navigate = useNavigate();
 
   const gotoSearchPW =() =>{
@@ -30,9 +32,16 @@ const LoginPage = () => {
         email : data.email,
         password : data.password,
       });
-      console.log(res.data.token);
+      const { token, uid, nickname } = res.data;
+      console.log(res.data);
+      console.log(token, uid, nickname);
+      
       localStorage.setItem("accessToken", res.data.token);
+
       setAccessToken(res.data.token);
+      setUserID(res.data.uid);
+      setUserNickName(res.data.nickname);
+    
       setIsLogin(true);
       navigate('/');
     }
