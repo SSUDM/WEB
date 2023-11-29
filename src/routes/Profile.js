@@ -180,11 +180,10 @@ const ModalContainer = styled.div`
   right: 0;
   background: rgba(0, 0, 0, 0.5);
 `;
-
 const Profile = () => {
   const { userId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-  const isOwner = false;
+  const isOwner = true;
 
   const { data: resume } = useQuery({
     queryKey: ["resume"],

@@ -181,15 +181,15 @@ const NewProject = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("maximumMember", count);
-    formData.append("projectImg", projectImg);
+    if (projectImg) {
+      formData.append("projectImg", projectImg);
+    }
     formData.append("recPart", positions);
     formData.append("recTech", techs);
     formData.append("recLevel", level);
     formData.append("during", period);
     formData.append("due", endDate);
     formData.append("content", content);
-
-    console.log(JSON.stringify([...formData.entries()]));
 
     try {
       const res = await axios({
@@ -202,7 +202,7 @@ const NewProject = () => {
         data: formData,
       });
       console.log(res);
-      // navigate("/project");
+      navigate(`/project/${res.data.aid}`);
     } catch (error) {
       console.error(error);
     }

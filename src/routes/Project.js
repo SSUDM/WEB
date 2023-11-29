@@ -210,7 +210,7 @@ const Project = () => {
   const isApplied = false;
   const [view, setView] = useState(false);
   const navigate = useNavigate();
-  const isOwner = false;
+  const isOwner = true;
 
   const { data: project } = useQuery({
     queryKey: ["project"],
@@ -276,7 +276,7 @@ const Project = () => {
                 <li>팀원 관리</li>
               </Link>
               <Link
-                to={"/editProject"}
+                to={`/editProject/${projectId}`}
                 style={{ textDecorationLine: "none", color: "black" }}
               >
                 <li>프로젝트 수정</li>
@@ -288,7 +288,10 @@ const Project = () => {
       )}
       <ProjectImg
         src={
-          project?.projectImg ? project?.projectImg : "../../img/project.jpg"
+          project?.projectImg !==
+          "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
+            ? project?.projectImg
+            : "../../img/project.jpg"
         }
       />
       <Title>{project?.title}</Title>
