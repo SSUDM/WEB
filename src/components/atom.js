@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { recoilPersist } from 'recoil-persist';
+import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
 
@@ -20,6 +20,7 @@ export const techOptionState = atom({
   default: [
     { value: "AWS", label: "AWS" },
     { value: "C", label: "C" },
+    { value: "Django", label: "Django" },
     { value: "Docker", label: "Docker" },
     { value: "Express", label: "Express" },
     { value: "Figma", label: "Figma" },
@@ -35,18 +36,19 @@ export const techOptionState = atom({
     { value: "Kubernetes", label: "Kubernetes" },
     { value: "MongoDB", label: "MongoDB" },
     { value: "MySQL", label: "MySQL" },
-    { value: "Nestjs", label: "Nestjs" },
-    { value: "Nextjs", label: "Nextjs" },
-    { value: "Nodejs", label: "Nodejs" },
+    { value: "Nest.js", label: "Nest.js" },
+    { value: "Next.js", label: "Next.js" },
+    { value: "Node.js", label: "Node.js" },
     { value: "PHP", label: "PHP" },
     { value: "Python", label: "Python" },
     { value: "React", label: "React" },
-    { value: "Reactnative", label: "ReactNative" },
+    { value: "ReactNative", label: "ReactNative" },
+    { value: "Spring", label: "Spring" },
     { value: "Svelte", label: "Svelte" },
     { value: "Swift", label: "Swift" },
     { value: "Typescript", label: "TypeScript" },
     { value: "Unity", label: "Unity" },
-    { value: "Vue", label: "Vue" },
+    { value: "Vue.js", label: "Vue.js" },
     { value: "Zeplin", label: "Zeplin" },
   ],
 });
@@ -78,7 +80,7 @@ export const tokenState = atom({
 export const loginState = atom({
   key: "loginState",
   default: false,
-  effects_UNSTABLE:[persistAtom],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const userIdState = atom({

@@ -25,7 +25,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/newProject" element={<NewProject />} />
-        <Route path="/editProject" element={<EditProject />} />
+        <Route path="/editProject/:projectId" element={<EditProject />} />
         <Route path="/project/:projectId" element={<Project />} />
         <Route path="/newProfile" element={<NewProfile />} />
         <Route path="/editProfile" element={<EditProfile />} />

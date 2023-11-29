@@ -360,7 +360,9 @@ const NewProfile = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("userImg", userImg);
+    if (userImg) {
+      formData.append("userImg", userImg);
+    }
     formData.append("part", position);
     formData.append("level", level);
     formData.append("tech", techs);
