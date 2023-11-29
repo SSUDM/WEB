@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { getPopProject } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 
 const Main = () => {
@@ -16,19 +17,17 @@ const Main = () => {
         slidesToScroll: 3,
         slidesToShow: 3,
         rows: 2,
-        // variableWidth: true,
         centerPadding: '10px',
       };
     const { isLoading, data:popproject } = useQuery({
         queryKey: ["popproject"],
         queryFn: ()=> getPopProject(),
-        refetchOnWindowFocus: false,
+        // onSuccess: (popproject) =>{console.log(popproject)},
+        refetchOnWindowFocus: 'always',
     });
-
     useEffect(()=>{
-        // popdata();
-        console.log(popproject);
-    },[popproject])
+        
+    },[])
 
     if(isLoading) {
         return (
@@ -38,23 +37,25 @@ const Main = () => {
             </>
         )
     }
-  return (
-    <>
-        <AD/>
-        <Container>
-            <ProjectWrapper>
-                <h3>인기 프로젝트</h3>
-                <CardWrapper>
-                    <PopularSlide {...settings}>
-                      {popproject&&popproject.map((option)=>{
-                        <ProjectCard option={option}/>
-                      })}
-                    </PopularSlide>
-                </CardWrapper>
-            </ProjectWrapper>
-        </Container>
-    </>
-  )
+    return (
+        <>
+            <AD/>
+            <Container>
+                <ProjectWrapper>
+                    <h3>인기 프로젝트</h3>
+                    <CardWrapper>
+                        <PopularSlide {...settings}>
+                            {popproject&&popproject.map((option)=>{
+                                return(
+                                    <ProjectCard option={option}/>
+                                )
+                            })}                     
+                        </PopularSlide>
+                    </CardWrapper>
+                </ProjectWrapper>
+            </Container>
+        </>
+    )
 }
 const PopularSlide = styled(Slider)`
     width: 880px;

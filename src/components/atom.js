@@ -84,6 +84,7 @@ export const loginState = atom({
 export const userIdState = atom({
   key: "userIDState",
   default: "",
+  effects_UNSTABLE:[persistAtom],
 })
 
 export const nickNameState = atom({
@@ -92,6 +93,11 @@ export const nickNameState = atom({
   effects_UNSTABLE:[persistAtom],
 })
 
+export const likeState = atom({
+  key: "likeState",
+  default: false,
+  effects_UNSTABLE:[persistAtom],
+})
 
 export const ProjectActiveState = atom({
   key: "activeState",

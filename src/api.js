@@ -181,10 +181,24 @@ export const getPopProject = async () =>{
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
       }
     });
-    console.log(response.data);
+    console.log(response);
     return response.data;
   }
   catch(err){
     console.log(err);
   }
 };
+
+export const getRecommendProject = async () =>{
+  try{
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/rec-project`,{
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      }
+    });
+    console.log(response);
+    return response.data;
+  }catch(err){
+    console.log(err);
+  }
+}

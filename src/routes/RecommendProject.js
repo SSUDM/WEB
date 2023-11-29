@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import styled from "styled-components";
 import ProjectCard from '../components/ProjectCard';
 import StyledSlide from '../style/StyledSlide';
@@ -9,7 +9,8 @@ import {
   techOptionState,
 } from "../components/atom";
 import { useRecoilValue } from "recoil";
-import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { getRecommendProject } from '../api';
 
 const RecommendProject = () => {
     const positionOption = useRecoilValue(positionOptionState);
@@ -22,20 +23,28 @@ const RecommendProject = () => {
 
     const settings = {
         slide: <ProjectCard />,
-        infinite: true,
-        speed: 500,
-        arrows: true,
         dots: true,
-        // autoplay: false,
-        // autoplaySpeed: 2000,
+        infinite: false,
+        speed: 950,
         slidesToShow: 3,
         slidesToScroll: 3,
         rows: 3,
-        centerMode: false,
         variableWidth: true,
-        centerPadding: '0px',
+        centerPadding: '10px',
       };
+    const { isLoading, data:recproject } = useQuery({
+        queryKey: ["recproject"],
+        queryFn: ()=>getRecommendProject(),
+        onSuccess: (recproject) =>{console.log(recproject)},
+        refetchOnWindowFocus: false,
+    });
 
+    useEffect(()=>{},[])
+    if(isLoading){
+        return(
+            <div>로딩중..</div>
+        )
+    }
   return (
     <Wrapper>
         <Filter>추천 검색 필터</Filter>
@@ -65,24 +74,11 @@ const RecommendProject = () => {
         <Text>추천 프로젝트</Text>
             <CardWrapper>
                 <StyledSlide {...settings}>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
-                    <ProjectCard/>
+                    {recproject&&recproject.map((option)=>{
+                        return(
+                            <ProjectCard option={option}/>
+                        )
+                    })}
                 </StyledSlide>
             </CardWrapper>
         </ProjectWrapper>
@@ -116,8 +112,9 @@ const SelectArea = styled.div`
     left: 140px;
 `;
 const Text = styled.div`
-    margin: 0 900px 40px 0;
-    font-size: 20px;
+    position: absolute;
+    top: 60px;
+    font-size: 22px;
     font-weight: bold;
 `;
 const ProjectWrapper = styled.div`
