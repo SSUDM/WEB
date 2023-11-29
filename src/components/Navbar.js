@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { loginState } from "./atom";
+import { loginState, nickNameState } from "./atom";
 
 const NavbarStyle = styled.header`
   display: flex;
@@ -45,6 +45,10 @@ const Menu = styled.p`
 const Login = styled.p`
   cursor: pointer;
   font-size: 14px;
+  span{
+    font-size: 16px;
+    font-weight: bold;
+  }
 `;
 
 const CreateProject = styled.button`
@@ -67,7 +71,9 @@ const CreateProject = styled.button`
 
 const Navbar = () => {
   const isLogin = useRecoilValue(loginState);
+  const nickName = useRecoilValue(nickNameState);
   const navigate = useNavigate();
+
   const goToLogin = () => {
     navigate("/login");
   };
@@ -77,6 +83,9 @@ const Navbar = () => {
   const goToProject = () => {
     navigate("/project");
   };
+  useEffect(()=>{
+    // console.log(isLogin);
+  },[])
   return (
     <NavbarStyle>
       <RightContainer>
@@ -86,15 +95,9 @@ const Navbar = () => {
       </RightContainer>
 
       <LeftContainer>
-        {isLogin ? (
-          <Login>환영합니다!</Login>
-        ) : (
-          <Login onClick={goToLogin}>로그인</Login>
-        )}
+        {isLogin?<Login><span>{nickName}님!</span>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
         <FaCircleUser size={18} />
-        <Link to="/newProject">
-          <CreateProject>+프로젝트 생성</CreateProject>
-        </Link>
+        <CreateProject>+프로젝트 생성</CreateProject>
       </LeftContainer>
     </NavbarStyle>
   );
