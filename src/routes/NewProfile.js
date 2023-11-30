@@ -379,6 +379,7 @@ const NewProfile = () => {
       formData.append(`history[${index}].title`, data.title);
       formData.append(`history[${index}].content`, data.content);
     });
+    console.log(JSON.stringify([...formData.entries()]));
 
     try {
       const res = await axios({
