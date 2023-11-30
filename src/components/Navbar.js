@@ -13,7 +13,6 @@ const NavbarStyle = styled.header`
   align-items: center;
   width: 100%;
   height: 50px;
-  /* font-size: 18px; */
   font-family: "Pretendard-Regular";
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 `;
@@ -81,7 +80,7 @@ const Navbar = () => {
     navigate("/");
   };
   const goToProject = () => {
-    navigate("/project");
+    navigate("/editProject");
   };
   useEffect(()=>{
     // console.log(isLogin);
@@ -95,7 +94,7 @@ const Navbar = () => {
       </RightContainer>
 
       <LeftContainer>
-        {isLogin?<Login><span>{nickName}님!</span>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
+        {isLogin?<Login><span>{nickName}님 </span>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
         <FaCircleUser size={18} />
         <CreateProject>+프로젝트 생성</CreateProject>
       </LeftContainer>

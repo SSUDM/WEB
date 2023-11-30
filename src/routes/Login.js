@@ -33,9 +33,9 @@ const LoginPage = () => {
         password : data.password,
       });
       const { token, uid, nickname } = res.data;
-      console.log(res.data);
-      console.log(token, uid, nickname);
-
+      // console.log(res.data);
+      // console.log(token, uid, nickname);
+     
       localStorage.setItem("accessToken", res.data.token);
 
       setAccessToken(res.data.token);
