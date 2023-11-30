@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Select from "react-select";
 import {
@@ -6,10 +6,13 @@ import {
   periodOptionState,
   positionOptionState,
   techOptionState,
+  tokenState,
 } from "../components/atom";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { getProject } from "../api";
 
 const Container = styled.form`
   display: flex;
@@ -148,22 +151,65 @@ const EditProject = () => {
   const techOption = useRecoilValue(techOptionState);
   const periodOption = useRecoilValue(periodOptionState);
   const levelOption = useRecoilValue(levelOptionState);
-
+  const [projectImg, setProjectImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
   const [title, setTitle] = useState("");
+  const [count, setCount] = useState(0);
   const [positions, setPositions] = useState([]);
   const [techs, setTechs] = useState("");
   const [period, setPeriod] = useState();
   const [endDate, setEndDate] = useState(null);
   const [level, setLevel] = useState("");
   const [content, setContent] = useState("");
+  const authToken = useRecoilValue(tokenState);
+  const { projectId } = useParams();
 
   const navigate = useNavigate();
+
+  const { data: project } = useQuery({
+    queryKey: ["project"],
+    queryFn: () => getProject(projectId.toString()),
+  });
+
+  useEffect(() => {
+    if (project) {
+      setTitle(project.title);
+      setCount(project.maximumMember);
+      if (
+        project.projectImg !==
+        "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
+      ) {
+        setPreviewImg(project.projectImg);
+      }
+      setPositions(
+        project.recPart.map((part) => ({
+          label: part,
+          value: part,
+        }))
+      );
+      setTechs(
+        project.recTech.map((tech) => ({
+          label: tech,
+          value: tech,
+        }))
+      );
+      setLevel({
+        label: project.recLevel,
+        value: project.recLevel,
+      });
+      setPeriod({
+        label: project.during,
+        value: project.during,
+      });
+      setEndDate(project.due);
+      setContent(project.content);
+    }
+  }, [project]);
 
   const insertImg = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setPreviewImg(file);
+      setProjectImg(file);
       let reader = new FileReader();
       reader.onload = () => {
         const fileURL = reader.result;
@@ -176,32 +222,40 @@ const EditProject = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("projectImg", previewImg);
     formData.append("title", title);
-    formData.append("positions", positions);
-    formData.append("techs", techs);
-    formData.append("period", period);
-    formData.append("endDate", endDate);
-    formData.append("level", level);
+    formData.append("maximumMember", count);
+    if (projectImg) {
+      formData.append("projectImg", projectImg);
+    }
+    formData.append(
+      "recPart",
+      positions.map((part) => part.value)
+    );
+    formData.append(
+      "recTech",
+      techs.map((tech) => tech.value)
+    );
+    formData.append("recLevel", level.value);
+    formData.append("during", period.value);
+    formData.append("due", endDate);
     formData.append("content", content);
-
     console.log(JSON.stringify([...formData.entries()]));
-    /*
+
     try {
       const res = await axios({
-        method: "post",
-        url: `api-address`,
+        method: "put",
+        url: `${process.env.REACT_APP_API_URL}/api/articles/${projectId}`,
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authToken}`,
         },
         data: formData,
       });
-
       console.log(res);
-      // navigate("/project");
+      navigate(`/project/${res.data.aid}`);
     } catch (error) {
       console.error(error);
-    }*/
+    }
   };
 
   return (
@@ -232,43 +286,52 @@ const EditProject = () => {
         <Tag>
           <span>모집 파트</span>
           <Options
-            onChange={(selectOptions) =>
-              setPositions(selectOptions.map((option) => option.value))
-            }
+            onChange={(selectOptions) => setPositions(selectOptions)}
             options={positionOption}
             isMulti
+            value={positions}
           />
         </Tag>
         <Tag>
           <span>모집 인원</span>
-          <MemberCount type="number" min="0" />
+          <MemberCount
+            value={count}
+            type="number"
+            min="0"
+            onChange={(e) => setCount(e.target.value)}
+          />
         </Tag>
         <Tag>
           <span>기술 스택</span>
           <Options
-            onChange={(selectOptions) =>
-              setTechs(selectOptions.map((option) => option.value))
-            }
+            onChange={(selectOptions) => setTechs(selectOptions)}
             options={techOption}
             isMulti
+            value={techs}
           />
         </Tag>
         <Tag>
           <span>개발 기간</span>
           <Options
-            onChange={(selectOptions) => setPeriod(selectOptions.value)}
+            onChange={(selectOptions) => setPeriod(selectOptions)}
             options={periodOption}
+            value={period}
           />
         </Tag>
         <Tag>
           <span>모집 마감</span>
-          <Date type="date" onChange={(e) => setEndDate(e.target.value)} />
+          <Date
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
         </Tag>
         <Tag>
           <span>요구 숙련도</span>
           <Options
-            onChange={(selectOptions) => setLevel(selectOptions.value)}
+            onChange={(selectOptions) => setLevel(selectOptions)}
             options={levelOption}
+            value={level}
           />
         </Tag>
       </Tags>
@@ -281,7 +344,7 @@ const EditProject = () => {
           required
         />
       </Description>
-      <Button onClick={onSubmit}>프로젝트 생성하기</Button>
+      <Button onClick={onSubmit}>프로젝트 수정하기</Button>
     </Container>
   );
 };
