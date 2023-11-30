@@ -7,6 +7,7 @@ import {
   nickNameState,
   positionOptionState,
   techOptionState,
+  tokenState,
   userIdState,
 } from "../components/atom";
 import { Link } from "react-router-dom";
@@ -343,7 +344,8 @@ const EditProfile = () => {
   const [projects, setProjects] = useState([]);
   const [title, setTitle] = useState();
   const [project, setProject] = useState();
-  const userId = 5; //useRecoilValue(userIdState);
+  const userId = useRecoilValue(userIdState);
+  const authToken = useRecoilValue(tokenState);
 
   const { data: resume } = useQuery({
     queryKey: ["resume"],
@@ -438,6 +440,7 @@ const EditProfile = () => {
         url: `${process.env.REACT_APP_API_URL}/api/resume`,
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authToken}`,
         },
         data: formData,
       });

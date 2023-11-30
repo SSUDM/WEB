@@ -130,7 +130,7 @@ const CareerInfo = styled.div`
   display: flex;
 `;
 const Date = styled.div`
-  width: 160px;
+  width: 165px;
   margin-right: 30px;
 `;
 
@@ -186,7 +186,7 @@ const Profile = () => {
   const { userId } = useParams();
   const myuid = useRecoilValue(userIdState);
   const [isOpen, setIsOpen] = useState(false);
-  const isOwner = userId === myuid ? true : false;
+  const isOwner = userId === myuid.toString() ? true : false;
 
   const { data: resume } = useQuery({
     queryKey: ["resume"],
