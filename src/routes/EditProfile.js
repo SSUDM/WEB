@@ -1,15 +1,19 @@
 import styled from "styled-components";
 import Select from "react-select";
-import { useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useEffect, useRef, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   levelOptionState,
+  nickNameState,
   positionOptionState,
   techOptionState,
+  userIdState,
 } from "../components/atom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { IoIosClose } from "react-icons/io";
+import { useQuery } from "react-query";
+import { getResume } from "../api";
 
 const Container = styled.div`
   display: flex;
@@ -325,8 +329,9 @@ const EditProfile = () => {
   const positionOption = useRecoilValue(positionOptionState);
   const levelOption = useRecoilValue(levelOptionState);
   const techOption = useRecoilValue(techOptionState);
-  const [userImg, setUserImg] = useState();
-  const [name, setName] = useState("");
+  const [userImg, setUserImg] = useState(null);
+  const [changedNickName, setChangedNickName] = useState(null);
+  const [nickname, setNickName] = useRecoilState(nickNameState);
   const [position, setPosition] = useState("");
   const [level, setLevel] = useState("");
   const [techs, setTechs] = useState([]);
@@ -338,7 +343,55 @@ const EditProfile = () => {
   const [projects, setProjects] = useState([]);
   const [title, setTitle] = useState();
   const [project, setProject] = useState();
-  const [resumeRequest, setResumeRequest] = useState();
+  const userId = 5; //useRecoilValue(userIdState);
+
+  const { data: resume } = useQuery({
+    queryKey: ["resume"],
+    queryFn: () => getResume(userId.toString()),
+  });
+  // console.log(resume);
+  useEffect(() => {
+    if (resume) {
+      setPosition({
+        label: resume.part,
+        value: resume.part,
+      });
+      setLevel({
+        label: resume.level,
+        value: resume.level,
+      });
+      if (
+        resume.userImg !==
+        "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
+      ) {
+        setUserImg(resume.userImg);
+      }
+      setTechs(
+        resume.tech.map((data) => ({
+          label: data,
+          value: data,
+        }))
+      );
+      setCareers(
+        resume.careerList.map((data) => ({
+          cid: data.cid,
+          startDate: data.startDate,
+          endDate: data.endDate,
+          career: data.content,
+        }))
+      );
+      console.log(careers);
+      setProjects(
+        resume.history.map((data) => ({
+          id: data.id,
+          title: data.title,
+          content: data.content,
+        }))
+      );
+      setIntroduction(resume.introduction);
+    }
+    setChangedNickName(nickname);
+  }, [resume]);
 
   const insertImg = (e) => {
     const file = e.target.files[0];
@@ -356,27 +409,40 @@ const EditProfile = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("userImg", userImg);
-    formData.append("part", position);
-    formData.append("level", level);
-    formData.append("tech", techs);
+    if (userImg) {
+      formData.append("userImg", userImg);
+    }
+    formData.append("part", position.value);
+    formData.append("level", level.value);
+    formData.append(
+      "tech",
+      techs.map((data) => data.value)
+    );
     formData.append("introduction", introduction);
-    formData.append("careerList", careers);
-    formData.append("history", projects);
-
+    careers.forEach((data, index) => {
+      formData.append(`careerList[${index}].cid`, data.cid);
+      formData.append(`careerList[${index}].startDate`, data.startDate);
+      formData.append(`careerList[${index}].endDate`, data.endDate);
+      formData.append(`careerList[${index}].career`, data.career);
+    });
+    projects.forEach((data, index) => {
+      formData.append(`history[${index}].id`, data.id);
+      formData.append(`history[${index}].title`, data.title);
+      formData.append(`history[${index}].content`, data.content);
+    });
     console.log(JSON.stringify([...formData.entries()]));
 
     try {
       const res = await axios({
-        method: "post",
+        method: "put",
         url: `${process.env.REACT_APP_API_URL}/api/resume`,
         headers: {
           "Content-Type": "multipart/form-data",
         },
         data: formData,
       });
-
       console.log(res);
+      setNickName(changedNickName);
       // navigate("/project");
     } catch (error) {
       console.error(error);
@@ -445,11 +511,16 @@ const EditProfile = () => {
         <UserInfo>
           <Content>
             <h1>이름</h1>
-            <Name onChange={(e) => setName(e.target.value)} required />
+            <Name
+              value={changedNickName}
+              onChange={(e) => setChangedNickName(e.target.value)}
+              required
+            />
           </Content>
           <Content>
             <h1>파트</h1>
             <SmallSelect
+              value={position}
               options={positionOption}
               onChange={(data) => setPosition(data.value)}
             />
@@ -457,6 +528,7 @@ const EditProfile = () => {
           <Content>
             <h1>숙련도</h1>
             <SmallSelect
+              value={level}
               options={levelOption}
               onChange={(data) => setLevel(data.value)}
             />
@@ -466,6 +538,7 @@ const EditProfile = () => {
       <Introduction>
         <h1>자기 소개</h1>
         <input
+          value={introduction}
           type="text"
           placeholder="자유롭게 입력해주세요."
           onChange={(e) => setIntroduction(e.target.value)}
@@ -474,9 +547,10 @@ const EditProfile = () => {
       <TechStack>
         <h1>기술 스택</h1>
         <TechSelect
+          value={techs}
           options={techOption}
-          onChange={(array) => {
-            setTechs(array.map((data) => data.value));
+          onChange={(selectOptions) => {
+            setTechs(selectOptions);
           }}
           isMulti
         />
@@ -543,12 +617,12 @@ const EditProfile = () => {
             <ProjectBox>
               <IoIosClose onClick={() => deleteProject(data.id)} />
               <h1>{data.title}</h1>
-              <span>{data.project}</span>
+              <span>{data.content}</span>
             </ProjectBox>
           ))}
         </ViewProjects>
       </ProjectContainer>
-      <ProfileBtn onClick={onSubmit}>이력서 생성하기</ProfileBtn>
+      <ProfileBtn onClick={onSubmit}>이력서 수정하기</ProfileBtn>
     </Container>
   );
 };

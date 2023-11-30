@@ -7,6 +7,7 @@ import {
   positionOptionState,
   techOptionState,
   tokenState,
+  userIdState,
 } from "../components/atom";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -341,7 +342,7 @@ const NewProfile = () => {
   const [title, setTitle] = useState();
   const [project, setProject] = useState();
   const authToken = useRecoilValue(tokenState);
-  const myuid = 1;
+  const myuid = useRecoilValue(userIdState);
   const navigate = useNavigate();
 
   const insertImg = (e) => {

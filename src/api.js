@@ -43,52 +43,16 @@ export const getRecommendedMembers = async (projectId) => {
 };
 
 export const getResume = async (userId) => {
-  /*
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/resume/${userId}`
-      );
-      console.log(data);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }*/
-  return {
-    userName: "JohnDoe",
-    part: "Backend",
-    level: "MASTER",
-    introduction: "Hello, I am a software developer.",
-    tech: ["Java", "Spring Boot", "Hibernate", "React"],
-    careerList: [
-      {
-        startDate: "2019-11-30",
-        endDate: "2022-11-30",
-        content: "sdf",
-        cid: 1,
-      },
-      {
-        startDate: "2019-11-30",
-        endDate: "2022-11-30",
-        content: "asd",
-        cid: 2,
-      },
-    ],
-    history: [
-      {
-        id: 1,
-        title: "창의적 공학 설계",
-        content: "숭실대학교 1학년 전공",
-      },
-      {
-        id: 2,
-        title: "캡스톤 디자인 3",
-        content: "숭실대학교 4학년 전공",
-      },
-    ],
-    userImg: null,
-    uid: 1,
-  };
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/resume/${userId}`
+    );
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const getMembers = async (projectId) => {
@@ -174,17 +138,19 @@ export const getMyProject = async () => {
   ];
 };
 
-export const getPopProject = async () =>{
-  try{
-    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/project/get-pop-projects`,{
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+export const getPopProject = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/project/get-pop-projects`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       }
-    });
+    );
     console.log(response.data);
     return response.data;
-  }
-  catch(err){
+  } catch (err) {
     console.log(err);
   }
 };
