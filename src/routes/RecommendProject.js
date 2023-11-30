@@ -1,7 +1,9 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import ProjectCard from '../components/ProjectCard';
-import StyledSlide from '../style/StyledSlide';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import Select from "react-select";
 import {
   levelOptionState,
@@ -9,6 +11,7 @@ import {
   techOptionState,
 } from "../components/atom";
 import { useRecoilValue } from "recoil";
+import axios from 'axios';
 import { useQuery } from 'react-query';
 import { getRecommendProject } from '../api';
 
@@ -16,11 +19,12 @@ const RecommendProject = () => {
     const positionOption = useRecoilValue(positionOptionState);
     const techOption = useRecoilValue(techOptionState);
     const levelOption = useRecoilValue(levelOptionState);
-
-    const [positions, setPositions] = useState([]);
-    const [techs, setTechs] = useState([]);
-    const [level, setLevel] = useState([]);
-
+    const [filterOptions, setFilterOptions] = useState({
+        recPart: [],
+        recTech: [],
+        recLevel: [],
+    });
+    const [isSelect, setIsSelect] = useState(false);
     const settings = {
         slide: <ProjectCard />,
         dots: true,
@@ -29,57 +33,94 @@ const RecommendProject = () => {
         slidesToShow: 3,
         slidesToScroll: 3,
         rows: 3,
-        variableWidth: true,
         centerPadding: '10px',
       };
+
     const { isLoading, data:recproject } = useQuery({
         queryKey: ["recproject"],
-        queryFn: ()=>getRecommendProject(),
-        onSuccess: (recproject) =>{console.log(recproject)},
+        queryFn: ()=> getRecommendProject(),
         refetchOnWindowFocus: false,
-    });
+    })
 
-    useEffect(()=>{},[])
+    useEffect(()=>{
+    //   console.log(recproject);
+    //   console.log(filterOptions);
+      const sendData = async() =>{
+        try{
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/rec-project`,{
+                recPart : filterOptions.recPart,
+                recTech : filterOptions.recTech,
+                recLevel : filterOptions.recLevel,
+            },{
+                headers:{
+                    'Content-Type':'application/json',
+                    'Authorization':`Bearer ${localStorage.getItem('accessToken')}`,
+                }
+            })
+            console.log(res.data);
+        }catch(err){
+            console.log(err);
+        }
+      }
+      if(filterOptions.recPart.length !== 0 || filterOptions.recTech.length !== 0 || filterOptions.recLevel.length !== 0){
+          sendData();
+          setIsSelect(true);
+      }
+    },[filterOptions])
+
     if(isLoading){
-        return(
-            <div>로딩중..</div>
+        return (
+            <div>로딩 중..</div>
         )
     }
-  return (
+
+    return (
     <Wrapper>
         <Filter>추천 검색 필터</Filter>
         <SelectArea>
             <CategorySelect
-                onChange={(selectOptions) => 
-                    setPositions(selectOptions.map((option) => option.value))}
+                onChange={(selectRecruit) =>
+                    setFilterOptions({ ...filterOptions, recPart: selectRecruit.map((option) => option.value) })}
                 options={positionOption}
                 placeholder="모집 분야"
-                isMulti/>
+                isMulti
+            />
             <CategorySelect
-                onChange={(selectOptions) => 
-                    setTechs(selectOptions.map((option) => option.value))}
+                onChange={(selectStack) =>
+                    setFilterOptions({ ...filterOptions, recTech: selectStack.map((option) => option.value) })}
                 options={techOption}
                 placeholder="기술 스택"
-                isMulti/>
+                isMulti
+            />
             <CategorySelect
-                onChange={(selectOptions) => 
-                    setLevel(selectOptions.map((option) => option.value))}
+                onChange={(selectLank) =>
+                    setFilterOptions({ ...filterOptions, recLevel: selectLank.map((option) => option.value) })}
                 options={levelOption}
                 placeholder="숙련도"
-                isMulti/>
+                isMulti
+            />
         </SelectArea>
-
-        
         <ProjectWrapper>
         <Text>추천 프로젝트</Text>
             <CardWrapper>
-                <StyledSlide {...settings}>
-                    {recproject&&recproject.map((option)=>{
+                    {isSelect?
+                    <>
+                    {/* {recproject&&recproject.map((option)=>{
                         return(
                             <ProjectCard option={option}/>
                         )
-                    })}
-                </StyledSlide>
+                    })} */}
+                    {/* <div>추천 필터 적용 화면입니다</div> */}
+                    </>
+                    :
+                    <PopularSlide {...settings}>
+                        {recproject&&recproject.map((option)=>{
+                            return(
+                                <ProjectCard option={option}/>
+                            )
+                        })}
+                    </PopularSlide>
+                    }
             </CardWrapper>
         </ProjectWrapper>
     </Wrapper>
@@ -113,7 +154,9 @@ const SelectArea = styled.div`
 `;
 const Text = styled.div`
     position: absolute;
-    top: 60px;
+    width: 200px;
+    top: 20px;
+    left: -41px;
     font-size: 22px;
     font-weight: bold;
 `;
@@ -123,6 +166,22 @@ const ProjectWrapper = styled.div`
     left: 140px;
 `;
 const CardWrapper = styled.div`
-    margin-bottom: 40px;
+    margin: 100px 0 40px 0;
+`;
+const PopularSlide = styled(Slider)`
+    width: 1000px;
+    .slick-list {
+    margin: 0;
+    overflow: hidden;
+    top: -10px;
+    }
+
+    .slick-arrow {
+        transform: translate(-20px, -20px);
+        background-color: #aaaaaa;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
 `;
 export default RecommendProject

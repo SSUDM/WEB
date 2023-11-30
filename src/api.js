@@ -196,7 +196,7 @@ export const getRecommendProject = async () =>{
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
       }
     });
-    console.log(response);
+    console.log(response.data);
     return response.data;
   }catch(err){
     console.log(err);

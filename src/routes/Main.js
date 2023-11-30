@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import ProjectCard from '../components/ProjectCard';
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { getPopProject } from '../api';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 
 const Main = () => {
@@ -60,9 +62,9 @@ const Main = () => {
 const PopularSlide = styled(Slider)`
     width: 880px;
     .slick-list {
-    margin: 0;
-    overflow: hidden;
-    top: -10px;
+        margin: 0;
+        overflow: hidden;
+        top: -10px;
     }
 
     .slick-arrow {
