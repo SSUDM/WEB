@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { getResume } from "../api";
 import { Link, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userIdState } from "../components/atom";
 
 const Container = styled.div`
   display: flex;
@@ -182,8 +184,9 @@ const ModalContainer = styled.div`
 `;
 const Profile = () => {
   const { userId } = useParams();
+  const myuid = useRecoilValue(userIdState);
   const [isOpen, setIsOpen] = useState(false);
-  const isOwner = true;
+  const isOwner = userId === myuid ? true : false;
 
   const { data: resume } = useQuery({
     queryKey: ["resume"],
@@ -204,7 +207,10 @@ const Profile = () => {
       <UserInfoContainer>
         <UserImg
           src={
-            resume?.userImg ? resume?.userImg : "../../img/default_profile.png"
+            resume?.userImg !==
+            "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
+              ? resume?.userImg
+              : "../../img/default_profile.png"
           }
         />
         <UserInfo>
