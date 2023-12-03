@@ -17,6 +17,7 @@ import RecommendMember from "./routes/RecommendMember";
 import EditProject from "./routes/EditProject";
 import MyProject from "./routes/MyProject";
 import EditProfile from "./routes/EditProfile";
+import RecMemberDetail from "./routes/RecMemberDetail";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/recommend" element={<RecommendProject />} />
         <Route path="/passwd" element={<PasswordSearch />} />
         <Route path="/recmember" element={<RecommendMember />} />
+        <Route path="/recmember/:pid" element={<RecMemberDetail />} />
         <Route path="/myproject" element={<MyProject />} />
       </Routes>
     </BrowserRouter>
