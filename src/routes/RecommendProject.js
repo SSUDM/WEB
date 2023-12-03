@@ -14,6 +14,7 @@ import { useRecoilValue } from "recoil";
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { getRecommendProject } from '../api';
+import { FadeLoader } from 'react-spinners';
 
 const RecommendProject = () => {
     const positionOption = useRecoilValue(positionOptionState);
@@ -25,14 +26,16 @@ const RecommendProject = () => {
         recLevel: [],
     });
     const [isSelect, setIsSelect] = useState(false);
+    const [list ,setList] = useState('');
     const settings = {
         slide: <ProjectCard />,
         dots: true,
         infinite: false,
+        focusOnChange: true,
         speed: 950,
         slidesToShow: 3,
         slidesToScroll: 3,
-        rows: 3,
+        rows: 2,
         centerPadding: '10px',
       };
 
@@ -44,7 +47,7 @@ const RecommendProject = () => {
 
     useEffect(()=>{
     //   console.log(recproject);
-    //   console.log(filterOptions);
+      console.log(filterOptions);
       const sendData = async() =>{
         try{
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/rec-project`,{
@@ -58,19 +61,31 @@ const RecommendProject = () => {
                 }
             })
             console.log(res.data);
+            setList(res.data);
         }catch(err){
             console.log(err);
         }
       }
-      if(filterOptions.recPart.length !== 0 || filterOptions.recTech.length !== 0 || filterOptions.recLevel.length !== 0){
-          sendData();
-          setIsSelect(true);
-      }
+        const hasSelectedOptions =
+        filterOptions.recPart.length !== 0 ||
+        filterOptions.recTech.length !== 0 ||
+        filterOptions.recLevel.length !== 0;
+
+        if (hasSelectedOptions) {
+            sendData();
+            
+            setIsSelect(true);
+        } 
+        else {
+            setIsSelect(false);
+        }
     },[filterOptions])
 
     if(isLoading){
         return (
-            <div>로딩 중..</div>
+            <Load>
+                <FadeLoader/>
+            </Load>
         )
     }
 
@@ -104,29 +119,52 @@ const RecommendProject = () => {
         <Text>추천 프로젝트</Text>
             <CardWrapper>
                     {isSelect?
-                    <>
-                    {/* {recproject&&recproject.map((option)=>{
-                        return(
-                            <ProjectCard option={option}/>
-                        )
-                    })} */}
-                    {/* <div>추천 필터 적용 화면입니다</div> */}
-                    </>
+                    // <PopularSlide {...settings}>
+                    <DefaultWrap>
+                        {list.length === 0 ?
+                            <NoOption>원하시는 프로젝트가 없네요..😭</NoOption>
+                            :
+                            <>
+                                {list&&list.map((option)=>{
+                                    return(
+                                        <ProjectCard option={option}/>
+                                    )
+                                })}
+                            </> 
+                        }
+                    </DefaultWrap>
+                    // </PopularSlide>
                     :
-                    <PopularSlide {...settings}>
+                    <DefaultWrap>
                         {recproject&&recproject.map((option)=>{
                             return(
                                 <ProjectCard option={option}/>
                             )
                         })}
-                    </PopularSlide>
+                    </DefaultWrap>
                     }
             </CardWrapper>
         </ProjectWrapper>
     </Wrapper>
   )
 }
-
+const Load = styled.div`
+    margin-top: 300px;
+    margin-left: 700px;
+`;
+const DefaultWrap = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 280px);
+    gap: 0px 57px;
+    margin-top: -10px;
+`;
+const NoOption = styled.div`
+    position: absolute;
+    top: 210px;
+    right: 310px;
+    font-size: 30px;
+    text-align: center;
+`;
 const Wrapper = styled.div`
     position: relative;
     width: 80%;
@@ -166,22 +204,21 @@ const ProjectWrapper = styled.div`
     left: 140px;
 `;
 const CardWrapper = styled.div`
-    margin: 100px 0 40px 0;
+    margin: 70px 0 40px 0;
 `;
-const PopularSlide = styled(Slider)`
-    width: 1000px;
-    .slick-list {
-    margin: 0;
-    overflow: hidden;
-    top: -10px;
-    }
+// const PopularSlide = styled(Slider)`
+//     width: 1000px;
+//     .slick-list {
+//         margin: 0;
+//         overflow: hidden;
+//         top: -10px;
+//     }
+//     .slick-arrow {
+//         transform: translate(-20px, -20px);
+//         background-color: #aaaaaa;
+//         border-radius: 3px;
+//         cursor: pointer;
+//     }
 
-    .slick-arrow {
-        transform: translate(-20px, -20px);
-        background-color: #aaaaaa;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-
-`;
+// `;
 export default RecommendProject
