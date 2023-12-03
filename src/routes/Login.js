@@ -43,7 +43,22 @@ const LoginPage = () => {
       setUserNickName(res.data.nickname);
     
       setIsLogin(true);
-      navigate("/");
+      try{
+        const check = await axios.get(`${process.env.REACT_APP_API_URL}/api/resume/${uid}`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        })
+        console.log(check.data);
+        if(check.data.level === null){
+          navigate('/newProfile')
+        }
+        else{
+          navigate('/');
+        }
+      }catch(err){
+        console.log(err);
+      }
     } catch (err) {
       console.log(err);
       alert("로그인에 실패했습니다. 다시 입력해주세요.");

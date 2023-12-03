@@ -25,9 +25,14 @@ const H1 = styled.h1`
 `;
 const LeftContainer = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
   gap: 20px;
   margin-right: 15px;
+  span{
+    font-size: 13px;
+    font-weight: bold;
+  }
 `;
 
 const RightContainer = styled.div`
@@ -37,8 +42,9 @@ const RightContainer = styled.div`
   margin-left: 15px;
 `;
 const Menu = styled.p`
-  margin-left: 50px;
-  font-size: 14px;
+  margin-left: 20px;
+  font-size: 16px;
+  width: 100px;
   cursor: pointer;
 `;
 const Login = styled.p`
@@ -79,11 +85,20 @@ const Navbar = () => {
   const goToMain = () => {
     navigate("/");
   };
-  const goToProject = () => {
+  const manageProject =() =>{
+    navigate('/myproject');
+  }
+  const gotoRecProject = () => {
     navigate("/recommend");
   };
   const gotoMember = () => {
     navigate("/recmember");
+  }
+  const gotoEditProfile =() =>{
+    navigate('/editProfile');
+  }
+  const gotoNewProject =() =>{
+    navigate('/newProject');
   }
   useEffect(()=>{
     // console.log(isLogin);
@@ -92,14 +107,16 @@ const Navbar = () => {
     <NavbarStyle>
       <RightContainer>
         <H1 onClick={goToMain}>DM</H1>
-        <Menu onClick={goToProject}>프로젝트</Menu>
-        <Menu onClick={gotoMember}>팀원 찾기</Menu>
+        <Menu onClick={manageProject}>프로젝트 관리</Menu>
+        <Menu onClick={gotoRecProject}>추천 프로젝트</Menu>
+        <Menu onClick={gotoMember}>추천 팀원</Menu>
       </RightContainer>
 
       <LeftContainer>
         {isLogin?<Login><span>{nickName}님 </span>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
-        <FaCircleUser size={18} />
-        <CreateProject>+프로젝트 생성</CreateProject>
+        <FaCircleUser size={18} onClick={gotoEditProfile} style={{cursor:'pointer', marginRight:'-16px'}}/>
+        {isLogin?<span>내 이력서 보기</span>:null}
+        <CreateProject onClick={gotoNewProject}>+프로젝트 생성</CreateProject>
       </LeftContainer>
     </NavbarStyle>
   );

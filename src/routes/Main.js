@@ -82,6 +82,7 @@ const AD = styled.img`
     height: 300px;
     background-color: #b4b4b4;
     margin-bottom: 100px;
+    object-fit: cover;
 `;
 const Load = styled.div`
     margin-left: 750px;
