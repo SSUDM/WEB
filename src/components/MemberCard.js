@@ -1,26 +1,30 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {ReactComponent as Heart} from "../Img/WishHeart.svg";
+import { useNavigate } from 'react-router-dom';
 
-const MemberCard = () => {
-    const [isWished, setIsWished] = useState(false);
-    const wishHandler =() =>{
-        setIsWished(!isWished);
-    }
+const MemberCard = ({data}) => {
+  
+  const navigate = useNavigate();
+  const gotoProfile =() =>{
+    navigate(`/profile/${data.uid}`);
+  }
   return (
-    <Card>
-        <MemberImg/>
-        <Title>차현수</Title>
-        <Rank>주니어</Rank>
+    <Card onClick={gotoProfile}>
+        <MemberImg src={data?.userImg !=="https://developermatching.s3.ap-northeast-2.amazonaws.com/"?data?.userImg : "../../img/default_profile.png"}/>
+        <Title>{data?.nickName}</Title>
+        <Rank style={{color: data.level ==="JUNIOR" ? 'red' : data.level === "SENIOR" ? 'blue' : 'green'}}>{data?.level}</Rank>
         <Line/>
-        <TeqList>
-            <TeqItem>Java</TeqItem>
-            <TeqItem>MySQL</TeqItem>
-        </TeqList>
-        <Present>정상을 향해 나아가는 차현수. 저는 주니어 백엔드 개발자입니다.</Present>
-        <LikedButton onClick={wishHandler}>
-            {isWished?<Heart width="20px" fill="red" stroke="red"/>:<Heart width="20px"/>}
-        </LikedButton>
+        <Tech>
+        {data?.tech ? (
+                        <div>
+                            {data.tech.map((tech, index) => (
+                            <span key={index} style={{ display: index < 3 ? 'inline-block' : 'none' }} >{tech}</span>
+                            ))}
+                        </div>) 
+                        : null}
+        </Tech>
+        <Present>{data?.introduction?data?.introduction:'정상을 향해 나아가는 개발자 차현수'}</Present>
     </Card>
   )
 }
@@ -37,7 +41,7 @@ const Card = styled.div`
         transform: scale(1.03);
     }
 `;
-const MemberImg = styled.div`
+const MemberImg = styled.img`
     width: 80px;
     height: 80px;
     border-radius: 100%;
@@ -49,31 +53,33 @@ const Title = styled.h2`
     top: 20px;
     left: 130px;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 23px;
     margin: 4px auto 10px auto;
 `;
-const Rank = styled.h4`
+const Rank = styled.div`
     position: absolute;
     top: 50px;
     left: 130px;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 10px;
 `;
 const Line = styled.div`
     border-bottom: 1px solid #c8c8c8;
     margin-top: 15px;
 `;
-const TeqList = styled.div`
+const Tech = styled.div`
     display: flex;
-    justify-content: left;
-    align-items: center;
-`;
-const TeqItem = styled.div`
-    border: 1px solid #aaaaaa;
-    background-color: #d2d2d2;
-    color: black;
-    font-size: 12px;
-    padding: 3px;
-    margin: 5px 0 0 5px;
+    margin-left: 10px;
+    span{
+        background-color: black;
+        color: white;
+        border-radius: 5px;
+        font-size: 12px;
+        margin-top: 8px;
+        margin-right: 5px;
+        padding: 3px;
+    }
 `;
 const Present = styled.div`
     margin-top: 20px;

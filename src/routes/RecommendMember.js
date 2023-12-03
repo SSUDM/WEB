@@ -1,49 +1,50 @@
-import React from 'react';
-import MemberCard from '../components/MemberCard';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Select from "react-select";
-import {
-  levelOptionState,
-  positionOptionState,
-  techOptionState,
-} from "../components/atom";
-import { useRecoilValue } from "recoil";
 import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { getMyProjectList } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const RecommendMember = () => {
-    const positionOption = useRecoilValue(positionOptionState);
-    const techOption = useRecoilValue(techOptionState);
-    const levelOption = useRecoilValue(levelOptionState);
 
-    const [positions, setPositions] = useState([]);
-    const [techs, setTechs] = useState([]);
-    const [level, setLevel] = useState([]);
+    const [ selectProject, setSelectProject ] = useState("");
+    const navigate = useNavigate();
+
+    const { isLoading, data:selproject } = useQuery({
+        queryKey: ["selproject"],
+        queryFn: ()=> getMyProjectList(),
+        refetchOnWindowFocus: false,
+    })
+    
+    const projectOptions = selproject&&selproject.map((project) => ({
+        value: project.title,
+        label: project.title,
+    }));
+    
+    useEffect(()=>{
+        selproject&&selproject.map((data)=>{
+            if(data.title === selectProject){
+                console.log(data);
+                navigate(`/recmember/${data.pid}`);
+            }
+        })
+    },[selectProject])
+
+  if(isLoading){
+    return(
+        <div>로딩 중..</div>
+    )
+  }
   return (
     <RecMemWrap>
-        <Title>추천 팀원</Title>
+        <Title>팀원 추천을 받고 싶은 프로젝트 목록을 고르세요!</Title>
         <SelectArea>
             <CategorySelect
-                onChange={(selectOptions) => 
-                    setPositions(selectOptions.map((option) => option.value))}
-                options={positionOption}
-                placeholder="모집 분야"
-                isMulti/>
-            <CategorySelect
-                onChange={(selectOptions) => 
-                    setTechs(selectOptions.map((option) => option.value))}
-                options={techOption}
-                placeholder="기술 스택"
-                isMulti/>
-            <CategorySelect
-                onChange={(data) => setLevel(data.value)}
-                options={levelOption}
-                placeholder="숙련도"/>
+                options={projectOptions}
+                onChange={(data)=> setSelectProject(data.value)}
+                placeholder="프로젝트 목록"/>
         </SelectArea>
-        <CardWrap>
-            <MemberCard/>
-            <MemberCard/>
-            <MemberCard/>
-        </CardWrap>
     </RecMemWrap>
   )
 }
@@ -70,13 +71,6 @@ const SelectArea = styled.div`
 const Title = styled.h3`
     position: absolute;
     left: 140px;
-`;
-const CardWrap = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3,300px);
-    position: absolute;
-    top: 200px;
-    left: 120px;
 `;
 
 export default RecommendMember

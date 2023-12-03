@@ -148,7 +148,7 @@ export const getPopProject = async () => {
         },
       }
     );
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (err) {
     console.log(err);
@@ -165,9 +165,125 @@ export const getRecommendProject = async () => {
         },
       }
     );
-    console.log(response.data);
+    // console.log(response);
     return response.data;
   } catch (err) {
     console.log(err);
   }
 };
+
+export const getMyProjectList = async () =>{
+  try{
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/get-managing-projects`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    console.log(response);
+    return response.data;
+  }catch(err){
+    console.log(err);
+  }
+}
+
+export const getMakeProject = async() =>{
+  try{
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/get-managing-projects`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    // console.log(response);
+    return response.data;
+  }catch(err){
+    console.log(err);
+  }
+}
+export const getJoinProject = async() =>{
+  try{
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/get-proceeding-projects`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    // console.log(response);
+    return response.data;
+  }catch(err){
+    console.log(err);
+  }
+}
+export const getLikeProject = async() =>{
+  try{
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/get-like-projects`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    // console.log(response);
+    return response.data;
+  }catch(err){
+    console.log(err);
+  }
+}
+export const getRequestProject = async() =>{
+  try{
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/get-applied-projects`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    // console.log(response);
+    return response.data;
+  }catch(err){
+    console.log(err);
+  }
+}
+export const getCooperateProject = async() =>{
+  try{
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/get-suggested-projects`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    // console.log(response);
+    return response.data;
+  }catch(err){
+    console.log(err);
+  }
+}
+
+export const getDoneProject = async() =>{
+  try{
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/get-done-projects`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    console.log(response);
+    return response.data;
+  }catch(err){
+    console.log(err);
+  }
+  
+}

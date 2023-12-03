@@ -80,8 +80,11 @@ const Navbar = () => {
     navigate("/");
   };
   const goToProject = () => {
-    navigate("/editProject");
+    navigate("/recommend");
   };
+  const gotoMember = () => {
+    navigate("/recmember");
+  }
   useEffect(()=>{
     // console.log(isLogin);
   },[])
@@ -90,7 +93,7 @@ const Navbar = () => {
       <RightContainer>
         <H1 onClick={goToMain}>DM</H1>
         <Menu onClick={goToProject}>프로젝트</Menu>
-        <Menu>팀원 찾기</Menu>
+        <Menu onClick={gotoMember}>팀원 찾기</Menu>
       </RightContainer>
 
       <LeftContainer>

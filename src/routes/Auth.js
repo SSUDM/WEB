@@ -57,18 +57,25 @@ const AuthPage = () => {
             setError('nickname',{message:"닉네임을 입력해주세요"});
             return;
         }
-        try{
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/register/check-nickname`,{
-                nickName : watch('nickname')
-            });
-            alert("사용 가능한 닉네임입니다.");
-            setNickNameCheck(true);
-            console.log(res);
+        const userNickCheck = window.confirm("닉네임은 한 번 설정하면 변경할 수 없습니다. 해당 닉네임을 사용하시겠습니까?");
+        if(userNickCheck){
+            try{
+                const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/register/check-nickname`,{
+                    nickName : watch('nickname')
+                });
+                alert("사용 가능한 닉네임입니다.");
+                setNickNameCheck(true);
+                console.log(res);
+            }
+            catch(err){
+                setError("nickname", { message : err.response.data });
+                setNickNameCheck(false);
+                console.log(err);
+            }
         }
-        catch(err){
-            setError("nickname", { message : err.response.data });
-            setNickNameCheck(false);
-            console.log(err);
+        else{
+            alert("다른 닉네임을 입력해주세요!");
+            return;
         }
     };
 
