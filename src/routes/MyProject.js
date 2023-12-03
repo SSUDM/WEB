@@ -1,24 +1,10 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-<<<<<<< HEAD
 import { ProjectActiveState } from "../components/atom";
-import axios from "axios";
 import styled from "styled-components";
 import Select from "react-select";
-import ProjectCard from "../components/ProjectCard";
-
-const MyProject = () => {
-  const projectactiveOption = useRecoilValue(ProjectActiveState);
-  const [projectActive, setProjectActive] = useState("");
-  useEffect(() => {
-    console.log(projectActive);
-  }, [projectActive]);
-=======
-import { ProjectActiveState } from '../components/atom';
-import styled from "styled-components";
-import Select from "react-select";
-import { useQuery } from 'react-query';
+import { useQuery } from "react-query";
 import {
   getMakeProject,
   getJoinProject,
@@ -26,60 +12,58 @@ import {
   getRequestProject,
   getCooperateProject,
   getDoneProject,
-} from "../api"
-import ProjectCard from '../components/ProjectCard';
-import { FadeLoader } from 'react-spinners';
+} from "../api";
+import ProjectCard from "../components/ProjectCard";
+import { FadeLoader } from "react-spinners";
 
 const MyProject = () => {
   const projectactiveOption = useRecoilValue(ProjectActiveState);
-  const [ projectActive, setProjectActive ] = useState("");
-  const [list, setList] = useState('');
+  const [projectActive, setProjectActive] = useState("");
+  const [list, setList] = useState("");
   const [isCoopReq, setIsCoopReq] = useState(true);
-  
-  const { isLoading, data:cooperateproject } = useQuery({
+
+  const { isLoading, data: cooperateproject } = useQuery({
     queryKey: ["cooperateproject"],
-    queryFn: ()=>getCooperateProject(),
+    queryFn: () => getCooperateProject(),
     refetchOnWindowFocus: false,
   });
 
-  const { data:makeproject } = useQuery({
+  const { data: makeproject } = useQuery({
     queryKey: ["makeproject"],
-    queryFn: ()=>getMakeProject(),
+    queryFn: () => getMakeProject(),
     refetchOnWindowFocus: false,
   });
 
-  const { data:joinproject } = useQuery({
+  const { data: joinproject } = useQuery({
     queryKey: ["joinproject"],
-    queryFn: ()=>getJoinProject(),
+    queryFn: () => getJoinProject(),
     refetchOnWindowFocus: false,
   });
 
-  const { data:likeproject } = useQuery({
+  const { data: likeproject } = useQuery({
     queryKey: ["likeproject"],
-    queryFn: ()=>getLikeProject(),
+    queryFn: () => getLikeProject(),
     refetchOnWindowFocus: false,
   });
 
-  const { data:requestproject } = useQuery({
+  const { data: requestproject } = useQuery({
     queryKey: ["requestproject"],
-    queryFn: ()=>getRequestProject(),
+    queryFn: () => getRequestProject(),
     refetchOnWindowFocus: false,
   });
 
-
-  const { data:doneproject } = useQuery({
+  const { data: doneproject } = useQuery({
     queryKey: ["doneproject"],
-    queryFn: ()=>getDoneProject(),
-  })
+    queryFn: () => getDoneProject(),
+  });
 
-
-  useEffect(()=>{
+  useEffect(() => {
     console.log(cooperateproject);
     setList(cooperateproject);
-  },[isLoading])
+  }, [isLoading]);
 
-  useEffect(()=>{
-    switch(projectActive){
+  useEffect(() => {
+    switch (projectActive) {
       case "협업 요청 온 프로젝트":
         setList(cooperateproject);
         setIsCoopReq(true);
@@ -107,21 +91,20 @@ const MyProject = () => {
       default:
         break;
     }
-  },[projectActive])
-  
-  useEffect(()=>{
+  }, [projectActive]);
+
+  useEffect(() => {
     console.log(list);
     console.log(isCoopReq);
-  },[list])
+  }, [list]);
 
-  if(isLoading){
+  if (isLoading) {
     return (
       <Load>
-        <FadeLoader/>
+        <FadeLoader />
       </Load>
-    )
+    );
   }
->>>>>>> 331079f854338295e59ef1ae23a9172071967c3d
   return (
     <Wrapper>
       <Title>내 프로젝트</Title>
@@ -131,32 +114,25 @@ const MyProject = () => {
         placeholder="프로젝트 종류"
         onChange={(data) => setProjectActive(data.value)}
       />
-<<<<<<< HEAD
-      <ProjectCard />
+      <DefaultWrap>
+        {list && list.length === 0 ? (
+          <NoProject>프로젝트 목록이 없습니다..</NoProject>
+        ) : (
+          <>
+            {list &&
+              list.map((option) => {
+                return <ProjectCard option={option} checkcoop={isCoopReq} />;
+              })}
+          </>
+        )}
+      </DefaultWrap>
     </Wrapper>
   );
 };
-=======
-      <DefaultWrap>
-        {list&&list.length === 0 ? <NoProject>프로젝트 목록이 없습니다..</NoProject> 
-          : 
-          <>
-            {list&&list.map((option)=>{
-              return (
-                <ProjectCard option={option} checkcoop={isCoopReq}/>
-              )
-            })}
-          </>
-        }
-      </DefaultWrap>
-    </Wrapper>
-  )
-}
 const Load = styled.div`
   margin-left: 650px;
   margin-top: 300px;
 `;
->>>>>>> 331079f854338295e59ef1ae23a9172071967c3d
 const Wrapper = styled.div`
   position: relative;
   margin: 100px 0 0 300px;
@@ -172,15 +148,15 @@ const ActiveSelect = styled(Select)`
   margin: 0 0 50px 670px;
 `;
 const DefaultWrap = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 280px);
-    gap: 0px 30px;
-    margin-top: -10px;
+  display: grid;
+  grid-template-columns: repeat(3, 280px);
+  gap: 0px 30px;
+  margin-top: -10px;
 `;
 const NoProject = styled.div`
-    position: absolute;
-    top: 270px;
-    left: 280px;
-    font-size: 30px;
+  position: absolute;
+  top: 270px;
+  left: 280px;
+  font-size: 30px;
 `;
 export default MyProject;

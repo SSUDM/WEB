@@ -382,7 +382,7 @@ const Project = () => {
             ))}
           </UserCards>
           <Link
-            to="/recMember"
+            to={`/recmember/${projectId}`}
             style={{ textDecoration: "underline rgba(0, 0, 0, 0.3)" }}
           >
             <span>자세히 보기</span>
