@@ -175,7 +175,7 @@ const NewProject = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  console.log(authToken);
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -197,7 +197,7 @@ const NewProject = () => {
         url: `${process.env.REACT_APP_API_URL}/api/articles`,
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         data: formData,
       });

@@ -19,7 +19,7 @@ export const techOptionState = atom({
   key: "techOptionState",
   default: [
     { value: "AWS", label: "AWS" },
-    { value: "C", label: "C" },
+    { value: "C언어", label: "C" },
     { value: "Django", label: "Django" },
     { value: "Docker", label: "Docker" },
     { value: "Express", label: "Express" },
@@ -29,7 +29,7 @@ export const techOptionState = atom({
     { value: "Git", label: "Git" },
     { value: "Go", label: "Go" },
     { value: "GraphQL", label: "GraphQL" },
-    { value: "Java", label: "Java" },
+    { value: "java", label: "Java" },
     { value: "JavaScript", label: "JavaScript" },
     { value: "Jest", label: "Jest" },
     { value: "Kotlin", label: "Kotlin" },
@@ -41,7 +41,7 @@ export const techOptionState = atom({
     { value: "Node.js", label: "Node.js" },
     { value: "PHP", label: "PHP" },
     { value: "Python", label: "Python" },
-    { value: "React", label: "React" },
+    { value: "react", label: "React" },
     { value: "ReactNative", label: "ReactNative" },
     { value: "Spring", label: "Spring" },
     { value: "Svelte", label: "Svelte" },
@@ -86,20 +86,20 @@ export const loginState = atom({
 export const userIdState = atom({
   key: "userIDState",
   default: "",
-  effects_UNSTABLE:[persistAtom],
-})
+  effects_UNSTABLE: [persistAtom],
+});
 
 export const nickNameState = atom({
   key: "nickNameState",
   default: "",
-  effects_UNSTABLE:[persistAtom],
-})
+  effects_UNSTABLE: [persistAtom],
+});
 
 export const likeState = atom({
   key: "likeState",
   default: false,
-  effects_UNSTABLE:[persistAtom],
-})
+  effects_UNSTABLE: [persistAtom],
+});
 
 export const ProjectActiveState = atom({
   key: "activeState",

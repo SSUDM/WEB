@@ -27,6 +27,7 @@ const UserImg = styled.img`
   border-radius: 60px;
   background-color: rgba(0, 0, 0, 0.1);
   margin-right: 50px;
+  object-fit: cover;
 `;
 
 const UserInfo = styled.div`
@@ -46,7 +47,7 @@ const Contents = styled.div`
   flex-direction: column;
   gap: 8px;
   width: 200px;
-  height: 70px;
+  height: 42px;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.1);
   padding: 15px;
@@ -130,7 +131,7 @@ const CareerInfo = styled.div`
   display: flex;
 `;
 const Date = styled.div`
-  width: 165px;
+  width: 170px;
   margin-right: 30px;
 `;
 
@@ -214,7 +215,7 @@ const Profile = () => {
           }
         />
         <UserInfo>
-          <h1>{resume?.userName}</h1>
+          <h1>{resume?.nickName}</h1>
           <Contents>
             <Content>
               <h1>파트</h1>
@@ -223,10 +224,6 @@ const Profile = () => {
             <Content>
               <h1>숙련도</h1>
               <span>{resume?.level}</span>
-            </Content>
-            <Content>
-              <h1>별점</h1>
-              <span>5.0점</span>
             </Content>
           </Contents>
         </UserInfo>
@@ -250,25 +247,37 @@ const Profile = () => {
       <Career>
         <h1>경력</h1>
         <CareerInfos>
-          {resume?.careerList.map((data) => (
-            <CareerInfo>
-              <Date>
-                {data?.startDate} - {data?.endDate}
-              </Date>
-              <span>{data?.content}</span>
-            </CareerInfo>
-          ))}
+          {resume?.careerList.length !== 0 ? (
+            resume?.careerList.map((data) => (
+              <CareerInfo>
+                <Date>
+                  {data?.startDate} ~ {data?.endDate}
+                </Date>
+                <span>{data?.content}</span>
+              </CareerInfo>
+            ))
+          ) : (
+            <span style={{ fontSize: "14px", color: "rgba(0,0,0,0.5)" }}>
+              경력이 없습니다.
+            </span>
+          )}
         </CareerInfos>
       </Career>
       <Border />
       <Projects>
         <h1>프로젝트</h1>
-        {resume?.history.map((data) => (
-          <Project>
-            <h1>{data?.title}</h1>
-            <span>{data?.content}</span>
-          </Project>
-        ))}
+        {resume?.history.length !== 0 ? (
+          resume?.history.map((data) => (
+            <Project>
+              <h1>{data?.title}</h1>
+              <span>{data?.content}</span>
+            </Project>
+          ))
+        ) : (
+          <span style={{ fontSize: "14px", color: "rgba(0,0,0,0.5)" }}>
+            프로젝트가 없습니다.
+          </span>
+        )}
       </Projects>
       {isOwner ? (
         <Link to={`/editProfile`}>

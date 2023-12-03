@@ -2,8 +2,9 @@ import styled from "styled-components";
 import Select from "react-select";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getMyProject } from "../api";
+import { getMyProceedingProject } from "../api";
 import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -53,9 +54,10 @@ const Button = styled.button`
 const SelectProject = ({ setIsOpen }) => {
   const [myProjectsOptions, setMyProjectsOptions] = useState([]);
   const [project, setProject] = useState("");
-  const { data: myproject } = useQuery({
-    queryKey: ["myproject"],
-    queryFn: () => getMyProject(),
+  const { userId } = useParams();
+  const { data: myproceedingproject } = useQuery({
+    queryKey: ["myproceedingproject"],
+    queryFn: () => getMyProceedingProject(),
   });
 
   const onDelete = () => {
@@ -70,31 +72,37 @@ const SelectProject = ({ setIsOpen }) => {
   };
 
   const onSubmit = async () => {
-    /*
     if (project) {
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/project/${project.value}/suggest-project`
+          `${process.env.REACT_APP_API_URL}/api/project/${project?.value}/${userId}/suggest-project`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
         );
         console.log(response.data);
+        if (response.data === "이미 협업 요청이 존재합니다.") {
+          alert("이미 협업을 요청하였습니다.");
+        }
       } catch (error) {
         console.error(error);
       }
-      
       setIsOpen(false);
-    }*/
-
+    }
     setIsOpen(false);
   };
 
   useEffect(() => {
-    if (myproject) {
-      const formattedOptions = myproject.map((data) =>
+    if (myproceedingproject) {
+      const formattedOptions = myproceedingproject.map((data) =>
         formatMyProjectsOption(data?.pid, data?.title)
       );
       setMyProjectsOptions(formattedOptions);
     }
-  }, [myproject]);
+  }, [myproceedingproject]);
 
   return (
     <Container>

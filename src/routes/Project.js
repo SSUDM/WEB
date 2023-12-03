@@ -5,6 +5,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { userIdState } from "../components/atom";
 
 const Container = styled.div`
   display: flex;
@@ -76,6 +78,7 @@ const UserImg = styled.img`
   border-radius: 25px;
   background-color: rgba(0, 0, 0, 0.1);
   margin-right: 10px;
+  object-fit: cover;
 `;
 
 const Info = styled.div`
@@ -210,28 +213,30 @@ const Project = () => {
   const isApplied = false;
   const [view, setView] = useState(false);
   const navigate = useNavigate();
-  const isOwner = true;
+  const myuid = useRecoilValue(userIdState);
 
   const { data: project } = useQuery({
     queryKey: ["project"],
     queryFn: () => getProject(projectId.toString()),
   });
 
-  const { data: recommandedMembers } = useQuery({
-    queryKey: ["recommandedMembers"],
-    queryFn: () => getRecommendedMembers(projectId.toString()),
-  });
+  const isOwner =
+    myuid.toString() === project?.articleOwnerId.toString() ? true : false;
 
-  const onApply = () => {
+  const onApply = async () => {
     if (window.confirm("프로젝트에 지원하시겠습니까?")) {
       try {
-        /*
-      const res = await axios({
-        method: "post",
-        url: `${process.env.REACT_APP_API_URL}/api/project/${projectId}/apply`,
-      });
-      console.log(res);
-      */
+        const res = await axios({
+          method: "post",
+          url: `${process.env.REACT_APP_API_URL}/api/project/${projectId}/apply`,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
+        console.log(res);
+        if (res.data === "이미 지원한 프로젝트 입니다.") {
+          alert("이미 지원한 프로젝트 입니다.");
+        }
         console.log("지원 성공");
       } catch (error) {
         console.error(error);
@@ -244,7 +249,12 @@ const Project = () => {
   const onFinish = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/project/${projectId}/terminate`
+        `${process.env.REACT_APP_API_URL}/api/project/${projectId}/terminate`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
       );
       console.log(response.data);
     } catch (error) {
@@ -298,7 +308,9 @@ const Project = () => {
       <User>
         <UserImg
           src={
-            project?.articleOwnerImg
+            project?.articleOwnerImg !==
+              "https://developermatching.s3.ap-northeast-2.amazonaws.com/" &&
+            project?.articleOwnerImg !== null
               ? project?.articleOwnerImg
               : "../../img/default_profile.png"
           }
@@ -347,23 +359,24 @@ const Project = () => {
         <Recommend>
           <h1>이런 팀원 어때요?</h1>
           <UserCards>
-            {recommandedMembers?.map((member) => (
+            {project?.recs.map((member) => (
               <Link
-                to={`/profile/${userId}`}
+                to={`/profile/${member.uid}`}
                 style={{ textDecorationLine: "none", color: "black" }}
               >
                 <UserCard>
                   <CardUser>
                     <CardImg
                       src={
-                        project?.recommendedUserImg
-                          ? project?.recommendedUserImg
+                        member.userImg !==
+                        "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
+                          ? member.userImg
                           : "../../img/default_profile.png"
                       }
                     />
-                    <h2>{member?.name}</h2>
+                    <h2>{member.nickName}</h2>
                   </CardUser>
-                  <div>{member?.intorduction}</div>
+                  <div>{member.introduction}</div>
                 </UserCard>
               </Link>
             ))}

@@ -247,7 +247,7 @@ const EditProject = () => {
         url: `${process.env.REACT_APP_API_URL}/api/articles/${projectId}`,
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         data: formData,
       });

@@ -112,7 +112,6 @@ const Button = styled.button`
 
 const FinishProject = () => {
   const { projectId } = useParams();
-  const userId = 1;
   const { data: members } = useQuery({
     queryKey: ["members"],
     queryFn: () => getMembers(projectId.toString()),
@@ -129,12 +128,19 @@ const FinishProject = () => {
         <Cards>
           {members?.map((data) => (
             <Link
-              to={`/profile/${userId}`}
+              to={`/profile/${data.uid}`}
               style={{ textDecoration: "none", color: "black" }}
             >
               <Card>
                 <User>
-                  <CardImg />
+                  <CardImg
+                    src={
+                      data.userImg !==
+                      "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
+                        ? data.userImg
+                        : "../../img/default_profile.png"
+                    }
+                  />
                   <span>{data?.nickName}</span>
                 </User>
                 <span>{data?.introduction}</span>

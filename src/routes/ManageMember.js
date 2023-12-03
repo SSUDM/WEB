@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { getApplicants, getMembers } from "../api";
-import { useQuery } from "react-query";
-import { Link, useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -25,6 +26,7 @@ const CardsContainer = styled.div`
 `;
 
 const Name = styled.div`
+  width: 780px;
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -110,48 +112,63 @@ const DenyBtn = styled.button`
 `;
 
 const ManageMember = () => {
+  const navigate = useNavigate();
   const { projectId } = useParams();
-  const userId = 1;
+
+  const queryClient = useQueryClient();
+
   const { data: members } = useQuery({
     queryKey: ["members"],
-    queryFn: () => getMembers(),
+    queryFn: () => getMembers(projectId.toString()),
   });
 
   const { data: applicants } = useQuery({
     queryKey: ["applicants"],
-    queryFn: () => getApplicants(),
+    queryFn: () => getApplicants(projectId.toString()),
   });
 
-  const onAccept = () => {
+  const onAccept = async (uid) => {
     if (window.confirm("요청을 수락하시겠습니까?")) {
-      /*
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/project/${projectId}/accept-join-project`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }*/
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/project/${projectId}/${uid}/accept-join-project`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        console.log(response.data);
+        queryClient.invalidateQueries("members");
+        queryClient.invalidateQueries("applicants");
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
       console.log("수락되었습니다.");
     } else {
       console.log("요청 수락 취소");
     }
   };
 
-  const onDeny = () => {
+  const onDeny = async (uid) => {
     if (window.confirm("요청을 거절하시겠습니까?")) {
-      /*
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/project/{pId}/reject-join-project`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }*/
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/project/${projectId}/${uid}/reject-join-project`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        console.log(response.data);
+        queryClient.invalidateQueries("members");
+        queryClient.invalidateQueries("applicants");
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
       console.log("거절되었습니다.");
     } else {
       console.log("요청 거절 취소");
@@ -176,44 +193,91 @@ const ManageMember = () => {
       <CardsContainer>
         <Name>팀원</Name>
         <Cards>
-          {members?.map((data) => (
-            <Link
-              to={`/profile/${userId}`}
-              style={{ textDecoration: "none", color: "black" }}
+          {members?.length !== 0 ? (
+            members?.map((data) => (
+              <Link
+                to={`/profile/${data.uid}`}
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Card>
+                  <User>
+                    <CardImg
+                      src={
+                        data.userImg !==
+                        "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
+                          ? data.userImg
+                          : "../../img/default_profile.png"
+                      }
+                    />
+                    <span>{data?.nickName}</span>
+                  </User>
+                  <span>{data?.introduction}</span>
+                </Card>
+              </Link>
+            ))
+          ) : (
+            <span
+              style={{
+                fontSize: "15px",
+                color: "rgba(0, 0, 0, 0.5)",
+                marginTop: "30px",
+              }}
             >
-              <Card>
-                <User>
-                  <CardImg />
-                  <span>{data?.nickName}</span>
-                </User>
-                <span>{data?.introduction}</span>
-              </Card>
-            </Link>
-          ))}
+              팀원이 존재하지 않습니다.
+            </span>
+          )}
         </Cards>
       </CardsContainer>
       <Border />
       <CardsContainer>
         <Name>지원자</Name>
         <Cards>
-          {applicants?.map((data) => (
-            <Link
-              to={`/profile/${userId}`}
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <Card>
+          {applicants?.length !== 0 ? (
+            applicants?.map((data) => (
+              <Card onClick={() => navigate(`/profile/${data.uid}`)}>
                 <User>
-                  <CardImg />
+                  <CardImg
+                    src={
+                      data.userImg !==
+                      "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
+                        ? data.userImg
+                        : "../../img/default_profile.png"
+                    }
+                  />
                   <span>{data?.nickName}</span>
                 </User>
                 <span>{data?.introduction}</span>
                 <Buttons>
-                  <AcceptBtn onClick={onAccept}>수락</AcceptBtn>
-                  <DenyBtn onClick={onDeny}>거절</DenyBtn>
+                  <AcceptBtn
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAccept(data.uid);
+                    }}
+                  >
+                    수락
+                  </AcceptBtn>
+                  <DenyBtn
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeny(data.uid);
+                    }}
+                  >
+                    거절
+                  </DenyBtn>
                 </Buttons>
               </Card>
-            </Link>
-          ))}
+            ))
+          ) : (
+            <span
+              style={{
+                fontSize: "15px",
+                color: "rgba(0, 0, 0, 0.5)",
+                marginTop: "30px",
+              }}
+            >
+              지원자가 존재하지 않습니다.
+            </span>
+          )}
         </Cards>
       </CardsContainer>
     </Container>

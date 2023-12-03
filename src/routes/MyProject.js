@@ -1,30 +1,30 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect } from "react";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { ProjectActiveState } from '../components/atom';
+import { ProjectActiveState } from "../components/atom";
 import axios from "axios";
 import styled from "styled-components";
 import Select from "react-select";
-import ProjectCard from '../components/ProjectCard';
+import ProjectCard from "../components/ProjectCard";
 
 const MyProject = () => {
   const projectactiveOption = useRecoilValue(ProjectActiveState);
-  const [ projectActive, setProjectActive ] = useState("");
-  useEffect(()=>{
+  const [projectActive, setProjectActive] = useState("");
+  useEffect(() => {
     console.log(projectActive);
-  },[projectActive])
+  }, [projectActive]);
   return (
     <Wrapper>
       <Title>내 프로젝트</Title>
       <ActiveSelect
         options={projectactiveOption}
         placeholder="프로젝트 종류"
-        onChange={(data)=> setProjectActive(data.value)}
+        onChange={(data) => setProjectActive(data.value)}
       />
-      <ProjectCard/>
+      <ProjectCard />
     </Wrapper>
-  )
-}
+  );
+};
 const Wrapper = styled.div`
   margin: 100px 0 0 300px;
   font-family: "Pretendard-Regular";
@@ -38,4 +38,4 @@ const ActiveSelect = styled(Select)`
   width: 230px;
   margin: 0 0 50px 600px;
 `;
-export default MyProject
+export default MyProject;

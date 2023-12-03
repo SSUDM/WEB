@@ -10,7 +10,7 @@ import {
   tokenState,
   userIdState,
 } from "../components/atom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IoIosClose } from "react-icons/io";
 import { useQuery } from "react-query";
@@ -58,17 +58,11 @@ const Content = styled.div`
   }
 `;
 
-const Name = styled.input`
+const Name = styled.div`
   width: 140px;
-  height: 30px;
   font-size: 15px;
   border: none;
-  border-bottom: solid 1px rgb(133, 133, 133);
   margin-left: 5px;
-  margin-bottom: 10px;
-  &:focus {
-    outline: none;
-  }
 `;
 
 const SmallSelect = styled(Select)`
@@ -279,6 +273,7 @@ const CareerBox = styled.div`
   div {
     display: flex;
     h3 {
+      width: 190px;
       margin: 0;
       font-size: 15px;
       margin-left: 20px;
@@ -331,8 +326,6 @@ const EditProfile = () => {
   const levelOption = useRecoilValue(levelOptionState);
   const techOption = useRecoilValue(techOptionState);
   const [userImg, setUserImg] = useState(null);
-  const [changedNickName, setChangedNickName] = useState(null);
-  const [nickname, setNickName] = useRecoilState(nickNameState);
   const [position, setPosition] = useState("");
   const [level, setLevel] = useState("");
   const [techs, setTechs] = useState([]);
@@ -346,6 +339,8 @@ const EditProfile = () => {
   const [project, setProject] = useState();
   const userId = useRecoilValue(userIdState);
   const authToken = useRecoilValue(tokenState);
+  const nickname = useRecoilValue(nickNameState);
+  const navigate = useNavigate();
 
   const { data: resume } = useQuery({
     queryKey: ["resume"],
@@ -392,7 +387,6 @@ const EditProfile = () => {
       );
       setIntroduction(resume.introduction);
     }
-    setChangedNickName(nickname);
   }, [resume]);
 
   const insertImg = (e) => {
@@ -440,13 +434,12 @@ const EditProfile = () => {
         url: `${process.env.REACT_APP_API_URL}/api/resume`,
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         data: formData,
       });
       console.log(res);
-      setNickName(changedNickName);
-      // navigate("/project");
+      navigate(`/profile/${userId}`);
     } catch (error) {
       console.error(error);
     }
@@ -467,13 +460,13 @@ const EditProfile = () => {
     setCareer("");
   };
 
-  const deleteCareer = (id) => {
+  const deleteCareer = (cid) => {
     setCareers(
       careers
-        .filter((item) => item.id !== id)
-        .map((item, index) => ({ ...item, id: index + 1 }))
+        .filter((item) => item.cid !== cid)
+        .map((item, index) => ({ ...item, cid: index + 1 }))
     );
-    console.log(id);
+    console.log(cid);
   };
 
   const addProject = () => {
@@ -482,7 +475,7 @@ const EditProfile = () => {
       projects.concat({
         id: projects.length + 1,
         title: title,
-        project: project,
+        content: project,
       })
     );
     setTitle("");
@@ -497,7 +490,9 @@ const EditProfile = () => {
     );
     console.log(id);
   };
-
+  console.log(authToken);
+  console.log(careers);
+  console.log(projects);
   return (
     <Container>
       <UserInfoContainer>
@@ -512,13 +507,9 @@ const EditProfile = () => {
           onChange={insertImg}
         />
         <UserInfo>
-          <Content>
-            <h1>이름</h1>
-            <Name
-              value={changedNickName}
-              onChange={(e) => setChangedNickName(e.target.value)}
-              required
-            />
+          <Content style={{ marginBottom: "10px" }}>
+            <h1>닉네임</h1>
+            <Name>{nickname}</Name>
           </Content>
           <Content>
             <h1>파트</h1>

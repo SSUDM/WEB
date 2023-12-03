@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import Select from "react-select";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import {
   levelOptionState,
+  nickNameState,
   positionOptionState,
   techOptionState,
   tokenState,
@@ -55,17 +56,11 @@ const Content = styled.div`
   }
 `;
 
-const Name = styled.input`
+const Name = styled.div`
   width: 140px;
-  height: 30px;
   font-size: 15px;
   border: none;
-  border-bottom: solid 1px rgb(133, 133, 133);
   margin-left: 5px;
-  margin-bottom: 10px;
-  &:focus {
-    outline: none;
-  }
 `;
 
 const SmallSelect = styled(Select)`
@@ -329,7 +324,6 @@ const NewProfile = () => {
   const techOption = useRecoilValue(techOptionState);
   const [userImg, setUserImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
-  const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [level, setLevel] = useState("");
   const [techs, setTechs] = useState([]);
@@ -343,6 +337,7 @@ const NewProfile = () => {
   const [project, setProject] = useState();
   const authToken = useRecoilValue(tokenState);
   const myuid = useRecoilValue(userIdState);
+  const nickname = useRecoilValue(nickNameState);
   const navigate = useNavigate();
 
   const insertImg = (e) => {
@@ -364,6 +359,7 @@ const NewProfile = () => {
     if (userImg) {
       formData.append("userImg", userImg);
     }
+    formData.append("nickName", nickname);
     formData.append("part", position);
     formData.append("level", level);
     formData.append("tech", techs);
@@ -387,7 +383,7 @@ const NewProfile = () => {
         url: `${process.env.REACT_APP_API_URL}/api/resume`,
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         data: formData,
       });
@@ -414,12 +410,13 @@ const NewProfile = () => {
     setCareer("");
   };
 
-  const deleteCareer = (id) => {
+  const deleteCareer = (cid) => {
     setCareers(
       careers
-        .filter((item) => item.id !== id)
-        .map((item, index) => ({ ...item, id: index + 1 }))
+        .filter((item) => item.cid !== cid)
+        .map((item, index) => ({ ...item, cid: index + 1 }))
     );
+    console.log(cid);
   };
 
   const addProject = () => {
@@ -460,9 +457,9 @@ const NewProfile = () => {
           onChange={insertImg}
         />
         <UserInfo>
-          <Content>
-            <h1>이름</h1>
-            <Name onChange={(e) => setName(e.target.value)} required />
+          <Content style={{ marginBottom: "10px" }}>
+            <h1>닉네임</h1>
+            <Name>{nickname}</Name>
           </Content>
           <Content>
             <h1>파트</h1>
