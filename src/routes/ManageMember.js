@@ -90,7 +90,8 @@ const Buttons = styled.div`
 `;
 
 const AcceptBtn = styled.button`
-  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+  background-color: #4754a3;
   width: 45px;
   height: 24px;
   font-size: 14px;
@@ -101,11 +102,12 @@ const AcceptBtn = styled.button`
 `;
 
 const DenyBtn = styled.button`
+  color: #4754a3;
   background-color: white;
   width: 45px;
   height: 24px;
   font-size: 14px;
-  border: solid 1px rgba(0, 0, 0, 0.2);
+  border: solid 1px #4754a3;
   border-radius: 15px;
   font-family: "Pretendard-Regular";
   cursor: pointer;

@@ -159,7 +159,8 @@ const CareerInfo = styled.input`
 const CareerBtn = styled.button`
   width: 45px;
   height: 25px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #4754a3;
+  color: white;
   border: none;
   border-radius: 20px;
   font-family: "Pretendard-Regular";
@@ -230,7 +231,8 @@ const ProjectContent = styled.div`
 const ProjectBtn = styled.button`
   width: 50px;
   height: 25px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #4754a3;
+  color: white;
   border: none;
   border-radius: 20px;
   margin-left: 570px;
@@ -246,7 +248,8 @@ const ProfileBtn = styled.button`
   font-weight: 700;
   border: none;
   border-radius: 20px;
-  background-color: #ffcad5;
+  background-color: #4754a3;
+  color: white;
   font-family: "Pretendard-Regular";
   cursor: pointer;
   margin-top: 50px;

@@ -16,11 +16,11 @@ const NavbarStyle = styled.header`
   font-family: "Pretendard-Regular";
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 `;
-const H1 = styled.h1`
-  width: 10%;
-  margin-right: 60px;
-  font-size: 35px;
-  font-weight: 700;
+
+const H1 = styled.img`
+  height: 35px;
+  margin-left: 10px;
+  margin-right: 20px;
   cursor: pointer;
 `;
 const LeftWrapper = styled.div`
@@ -35,14 +35,15 @@ const RightWrapper = styled.div`
   align-items: center;
   gap: 20px;
   margin-right: 15px;
-  span{
+  span {
     font-size: 13px;
     font-weight: bold;
     cursor: pointer;
   }
 `;
 const Menu = styled.p`
-  font-size: 16px;
+  text-align: center;
+  font-size: 15px;
   width: 100px;
   height: 36px;
   text-align: center;
@@ -58,7 +59,7 @@ const Menu = styled.p`
 const Login = styled.p`
   cursor: pointer;
   font-size: 14px;
-  span{
+  span {
     font-size: 16px;
     font-weight: bold;
   }
@@ -95,6 +96,7 @@ const Navbar = () => {
   const goToMain = () => {
     navigate("/");
   };
+  
   const manageProject =() =>{
     if(isLogin){
       navigate('/myproject');
@@ -104,6 +106,7 @@ const Navbar = () => {
       navigate('/login');
     }
   }
+
   const gotoRecProject = () => {
     if(isLogin){
       navigate("/recommend");
@@ -136,20 +139,29 @@ const Navbar = () => {
   }
   useEffect(()=>{
     // console.log(isLogin);
-  },[])
+  }, []);
   return (
     <NavbarStyle>
       <LeftWrapper>
-        <H1 onClick={goToMain}>DM</H1>
-        <Menu onClick={manageProject}>프로젝트 관리</Menu>
+        <H1 onClick={goToMain} src={"../../img/logo.jpg"} />
         <Menu onClick={gotoRecProject}>추천 프로젝트</Menu>
         <Menu onClick={gotoMember}>추천 팀원</Menu>
+        <Menu onClick={manageProject}>프로젝트 관리</Menu>
       </LeftWrapper>
 
       <RightWrapper>
-        {isLogin?<Login><span>{nickName}님 </span>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
-        <FaCircleUser size={18} style={{cursor:'pointer', marginRight:'-16px'}}/>
-        {isLogin?<span onClick={gotoEditProfile}>내 이력서 보기</span>:null}
+        {isLogin ? (
+          <Login>
+            <span>{nickName}님 </span>환영합니다!
+          </Login>
+        ) : (
+          <Login onClick={goToLogin}>로그인</Login>
+        )}
+        <FaCircleUser
+          size={18}
+          style={{ cursor: "pointer", marginRight: "-16px" }}
+        />
+        {isLogin ? <span onClick={gotoEditProfile}>내 이력서 보기</span> : null}
         <CreateProject onClick={gotoNewProject}>+프로젝트 생성</CreateProject>
       </RightWrapper>
     </NavbarStyle>
