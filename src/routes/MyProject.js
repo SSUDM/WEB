@@ -72,8 +72,9 @@ const MyProject = () => {
         break;
       case "만든 프로젝트":
         console.log(makeproject);
-        const result = makeproject.filter(data => data.projectStatus === "RECRUITING");
-        setList(result);
+        // const result = makeproject.filter(data => data.projectStatus === "RECRUITING");
+        // setList(result);
+        setList(makeproject);
         setIsCoopReq(false);
         setOwner(true)
         break;

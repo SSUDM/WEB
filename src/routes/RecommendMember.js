@@ -16,12 +16,16 @@ const RecommendMember = () => {
         queryFn: ()=> getMyProjectList(),
         refetchOnWindowFocus: false,
     })
-    
-    const projectOptions = selproject&&selproject.map((project) => ({
-        value: project.title,
-        label: project.title,
-    }));
-    
+
+    const projectOptions = selproject
+    ? selproject
+        .filter((project) => project.projectStatus === "RECRUITING")
+        .map((project) => ({
+          value: project.title,
+          label: project.title,
+        }))
+    : [];
+
     useEffect(()=>{
         selproject&&selproject.map((data)=>{
             if(data.title === selectProject){
