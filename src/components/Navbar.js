@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { loginState, nickNameState } from "./atom";
+import { loginState, nickNameState, userIdState } from "./atom";
 
 const NavbarStyle = styled.header`
   display: flex;
@@ -48,10 +47,13 @@ const Menu = styled.p`
   width: 100px;
   height: 36px;
   text-align: center;
-  padding-top: 13px;
+  padding-top: 17px;
+  margin-right: 10px;
   cursor: pointer;
-  &:hover {
-    background-color: #d2d2d2;
+  &:hover{
+    border-radius: 4px;
+    background-color: #dcdcdc;
+    opacity: 0.9;
   }
 `;
 const Login = styled.p`
@@ -71,12 +73,13 @@ const CreateProject = styled.button`
   padding: 10px;
   margin-left: 30px;
   width: 150px;
+  background-color: #4754A3;
   color: white;
-  background-color: #4754a3;
   cursor: pointer;
   &:hover {
-    outline: none;
-    background-color: #4754a3;
+    border: 0;
+    background-color: #4754A3;
+    color: white;
     transform: scale(1.05);
   }
 `;
@@ -84,6 +87,7 @@ const CreateProject = styled.button`
 const Navbar = () => {
   const isLogin = useRecoilValue(loginState);
   const nickName = useRecoilValue(nickNameState);
+  const userId = useRecoilValue(userIdState);
   const navigate = useNavigate();
 
   const goToLogin = () => {
@@ -92,22 +96,48 @@ const Navbar = () => {
   const goToMain = () => {
     navigate("/");
   };
-  const manageProject = () => {
-    navigate("/myproject");
-  };
+  
+  const manageProject =() =>{
+    if(isLogin){
+      navigate('/myproject');
+    }
+    else{
+      window.alert("로그인이 필요한 서비스 입니다!")
+      navigate('/login');
+    }
+  }
+
   const gotoRecProject = () => {
-    navigate("/recommend");
+    if(isLogin){
+      navigate("/recommend");
+    }
+    else{
+      window.alert("로그인이 필요한 서비스 입니다!")
+      navigate('/login');
+    }
   };
   const gotoMember = () => {
-    navigate("/recmember");
-  };
-  const gotoEditProfile = () => {
-    navigate("/editProfile");
-  };
-  const gotoNewProject = () => {
-    navigate("/newProject");
-  };
-  useEffect(() => {
+    if(isLogin){
+      navigate("/recmember");
+    }
+    else{
+      window.alert("로그인이 필요한 서비스 입니다!")
+      navigate('/login');
+    }
+  }
+  const gotoEditProfile =() =>{
+    navigate(`/profile/${userId}`);
+  }
+  const gotoNewProject =() =>{
+    if(isLogin){
+      navigate('/newProject');
+    }
+    else{
+      window.alert("로그인이 필요한 서비스 입니다!")
+      navigate('/login');
+    }
+  }
+  useEffect(()=>{
     // console.log(isLogin);
   }, []);
   return (
