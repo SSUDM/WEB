@@ -109,8 +109,8 @@ export const getRecommendProject = async () => {
   }
 };
 
-export const getMyProjectList = async () =>{
-  try{
+export const getMyProjectList = async () => {
+  try {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/get-managing-projects`,
       {
@@ -121,13 +121,13 @@ export const getMyProjectList = async () =>{
     );
     console.log(response);
     return response.data;
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
+};
 
-export const getMakeProject = async() =>{
-  try{
+export const getMakeProject = async () => {
+  try {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/get-managing-projects`,
       {
@@ -138,12 +138,12 @@ export const getMakeProject = async() =>{
     );
     // console.log(response);
     return response.data;
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
-export const getJoinProject = async() =>{
-  try{
+};
+export const getJoinProject = async () => {
+  try {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/get-proceeding-projects`,
       {
@@ -154,12 +154,12 @@ export const getJoinProject = async() =>{
     );
     // console.log(response);
     return response.data;
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
-export const getLikeProject = async() =>{
-  try{
+};
+export const getLikeProject = async () => {
+  try {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/get-like-projects`,
       {
@@ -170,12 +170,12 @@ export const getLikeProject = async() =>{
     );
     // console.log(response);
     return response.data;
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
-export const getRequestProject = async() =>{
-  try{
+};
+export const getRequestProject = async () => {
+  try {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/get-applied-projects`,
       {
@@ -186,12 +186,12 @@ export const getRequestProject = async() =>{
     );
     // console.log(response);
     return response.data;
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
-export const getCooperateProject = async() =>{
-  try{
+};
+export const getCooperateProject = async () => {
+  try {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/get-suggested-projects`,
       {
@@ -202,13 +202,13 @@ export const getCooperateProject = async() =>{
     );
     // console.log(response);
     return response.data;
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
+};
 
-export const getDoneProject = async() =>{
-  try{
+export const getDoneProject = async () => {
+  try {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/get-done-projects`,
       {
@@ -219,8 +219,7 @@ export const getDoneProject = async() =>{
     );
     console.log(response);
     return response.data;
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-  
-}
+};
