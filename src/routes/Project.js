@@ -143,9 +143,9 @@ const Button = styled.button`
   height: 30px;
   border: none;
   border-radius: 20px;
-  color: black;
+  color: white;
   background-color: ${({ isApplied }) =>
-    isApplied ? "rgba(0, 0, 0, 0.2)" : "#FFCAD5"};
+    isApplied ? "rgba(0, 0, 0, 0.2)" : "#4754A3"};
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;

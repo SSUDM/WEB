@@ -84,7 +84,8 @@ const CardImg = styled.img`
 `;
 
 const ReviewBtn = styled.button`
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #4754a3;
+  color: white;
   width: 75px;
   height: 22px;
   font-size: 13px;
@@ -104,7 +105,8 @@ const Button = styled.button`
   font-weight: 700;
   border: none;
   border-radius: 20px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #4754a3;
+  color: white;
   font-family: "Pretendard-Regular";
   cursor: pointer;
   margin-top: 50px;

@@ -71,12 +71,12 @@ const CreateProject = styled.button`
   padding: 10px;
   margin-left: 30px;
   width: 150px;
-  background-color: #d2d2d2;
+  color: white;
+  background-color: #4754a3;
   cursor: pointer;
   &:hover {
     outline: none;
-    border: 2px solid #9e9e9e;
-    background-color: #c8c8c8;
+    background-color: #4754a3;
     transform: scale(1.05);
   }
 `;
