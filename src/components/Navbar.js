@@ -19,8 +19,9 @@ const NavbarStyle = styled.header`
 `;
 
 const H1 = styled.img`
-  width: 110px;
+  height: 35px;
   margin-left: 10px;
+  margin-right: 20px;
   cursor: pointer;
 `;
 const LeftWrapper = styled.div`
@@ -49,7 +50,7 @@ const Menu = styled.p`
   text-align: center;
   padding-top: 13px;
   cursor: pointer;
-  &:hover{
+  &:hover {
     background-color: #d2d2d2;
   }
 `;
@@ -112,16 +113,25 @@ const Navbar = () => {
   return (
     <NavbarStyle>
       <LeftWrapper>
-        <H1 onClick={goToMain}>DM</H1>
+        <H1 onClick={goToMain} src={"../../img/logo.jpg"} />
         <Menu onClick={gotoRecProject}>추천 프로젝트</Menu>
         <Menu onClick={gotoMember}>추천 팀원</Menu>
         <Menu onClick={manageProject}>프로젝트 관리</Menu>
       </LeftWrapper>
 
       <RightWrapper>
-        {isLogin?<Login><span>{nickName}님 </span>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
-        <FaCircleUser size={18} style={{cursor:'pointer', marginRight:'-16px'}}/>
-        {isLogin?<span onClick={gotoEditProfile}>내 이력서 보기</span>:null}
+        {isLogin ? (
+          <Login>
+            <span>{nickName}님 </span>환영합니다!
+          </Login>
+        ) : (
+          <Login onClick={goToLogin}>로그인</Login>
+        )}
+        <FaCircleUser
+          size={18}
+          style={{ cursor: "pointer", marginRight: "-16px" }}
+        />
+        {isLogin ? <span onClick={gotoEditProfile}>내 이력서 보기</span> : null}
         <CreateProject onClick={gotoNewProject}>+프로젝트 생성</CreateProject>
       </RightWrapper>
     </NavbarStyle>
