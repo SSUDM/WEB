@@ -13,17 +13,24 @@ const NavbarStyle = styled.header`
   align-items: center;
   width: 100%;
   height: 50px;
+  margin-bottom: 5px;
   font-family: "Pretendard-Regular";
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 `;
 const H1 = styled.h1`
   width: 10%;
-  margin-right: 8%;
+  margin-right: 60px;
   font-size: 35px;
   font-weight: 700;
   cursor: pointer;
 `;
-const LeftContainer = styled.div`
+const LeftWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  margin-left: 15px;
+`;
+const RightWrapper = styled.div`
   display: flex;
   position: relative;
   align-items: center;
@@ -32,20 +39,19 @@ const LeftContainer = styled.div`
   span{
     font-size: 13px;
     font-weight: bold;
+    cursor: pointer;
   }
 `;
-
-const RightContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-left: 15px;
-`;
 const Menu = styled.p`
-  margin-left: 20px;
   font-size: 16px;
   width: 100px;
+  height: 36px;
+  text-align: center;
+  padding-top: 13px;
   cursor: pointer;
+  &:hover{
+    background-color: #d2d2d2;
+  }
 `;
 const Login = styled.p`
   cursor: pointer;
@@ -105,19 +111,19 @@ const Navbar = () => {
   },[])
   return (
     <NavbarStyle>
-      <RightContainer>
+      <LeftWrapper>
         <H1 onClick={goToMain}>DM</H1>
         <Menu onClick={manageProject}>프로젝트 관리</Menu>
         <Menu onClick={gotoRecProject}>추천 프로젝트</Menu>
         <Menu onClick={gotoMember}>추천 팀원</Menu>
-      </RightContainer>
+      </LeftWrapper>
 
-      <LeftContainer>
+      <RightWrapper>
         {isLogin?<Login><span>{nickName}님 </span>환영합니다!</Login>:<Login onClick={goToLogin}>로그인</Login>}
-        <FaCircleUser size={18} onClick={gotoEditProfile} style={{cursor:'pointer', marginRight:'-16px'}}/>
-        {isLogin?<span>내 이력서 보기</span>:null}
+        <FaCircleUser size={18} style={{cursor:'pointer', marginRight:'-16px'}}/>
+        {isLogin?<span onClick={gotoEditProfile}>내 이력서 보기</span>:null}
         <CreateProject onClick={gotoNewProject}>+프로젝트 생성</CreateProject>
-      </LeftContainer>
+      </RightWrapper>
     </NavbarStyle>
   );
 };
