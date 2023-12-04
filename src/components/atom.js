@@ -7,8 +7,8 @@ export const positionOptionState = atom({
   key: "positionOptionState",
   default: [
     { value: "PM", label: "PM" },
-    { value: "Frontend", label: "Frontend" },
-    { value: "Backend", label: "Backend" },
+    { value: "FrontEnd", label: "Frontend" },
+    { value: "BackEnd", label: "Backend" },
     { value: "Design", label: "Design" },
     { value: "Android", label: "Android" },
     { value: "IOS", label: "IOS" },

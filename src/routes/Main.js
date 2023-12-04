@@ -59,23 +59,30 @@ const Main = () => {
     )
 }
 const PopularSlide = styled(Slider)`
-    /* display: grid;
-    grid-template-columns: 900px 800px 800px;
-    grid-template-rows: 400px 400px; */
-    width: 880px;
+    width: 850px;
+    position: absolute;
     .slick-list {
         margin: 0;
         overflow: hidden;
         top: -10px;
     }
-
-    .slick-arrow {
-        transform: translate(7px, -25px);
-        background-color: #aaaaaa;
-        border-radius: 3px;
-        cursor: pointer;
+    .slick-prev{
+        position: absolute;
+        top: 300px;
+        left: -70px;
     }
-
+    .slick-next{
+        position: absolute;
+        top: 300px;
+        right: -60px;
+    }
+    .slick-prev:before, .slick-next:before{
+        cursor: pointer;
+        font-size: 40px;
+        line-height: 1;
+        opacity: .75;
+        color: #0A6E0A;
+    }
 `;
 const AD = styled.img`
     width: 100vw;
@@ -91,6 +98,7 @@ const Container = styled.div`
     margin-bottom: 300px;
 `;
 const ProjectWrapper = styled.div`
+    position: relative;
     width: 70%;
     height: 300px;
     margin: 10px 100px 0 auto;

@@ -12,40 +12,49 @@ const RecMemberDetail = () => {
   const [frontEnd, setFrontEnd] = useState('');
   const [mobile, setMobile] = useState('');
   const [design, setDesign] = useState('');
+  const [list, setList] = useState('');
   const [isLoading,setIsLoading] = useState(true);
+
   useEffect(()=>{
     const fetchData = async () => {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/rec-teammate/${pid}`);
-        //   console.log(response.data);
-          setBackEnd(response.data.BackEnd);
-          setFrontEnd(response.data.FrontEnd);
-          setMobile(response.data.Mobile);
-          setDesign(response.data.Design);
-          setIsLoading(false);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      fetchData();
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/rec-teammate/${pid}`,
+            {
+                headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                },
+            });
+            console.log(response.data);
+            setList(response.data);
+            setIsLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
+    };
+    fetchData();
   },[pid])  
+useEffect(()=>{
+    console.log(list);
+    const {BackEnd, FrontEnd, Mobile, Design} = list;
+    console.log('BackEnd' ,BackEnd);
+    console.log('FrontEnd' ,FrontEnd);
+    console.log('Mobile' ,Mobile);
+    console.log('Design', Design);
 
-  useEffect(()=>{
-    console.log('BackEnd' ,backEnd);
-    console.log(frontEnd);
-    console.log(mobile);
-    console.log(design);
-  },[backEnd,frontEnd,mobile,design])
+    setBackEnd(BackEnd);
+    setFrontEnd(FrontEnd);
+    setMobile(Mobile);
+    setDesign(Design);
+},[list])
 
   if(isLoading){
     return (
-        <>
+        <Load>
             <div>로딩 중..</div>
             <FadeLoader 
                 color='blue'
                 size={10}/>
-        </>
-
+        </Load>
     )
   }
   return (
@@ -104,6 +113,10 @@ const RecMemberDetail = () => {
     </RecMemWrap>
   )
 }
+const Load = styled.div`
+    margin-top: 280px;
+    margin-left: 700px;
+`;
 const Wrapper = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 270px);
@@ -130,7 +143,6 @@ const CardWrap = styled.div`
 `;
 const BackEndContainer = styled.div`
     text-align: left;
-    margin-bottom: 50px;
     h4{
         font-size: 20px;
     }

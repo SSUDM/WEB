@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginState } from './atom';
 import { useRecoilValue } from 'recoil';
 
-const ProjectCard = ({option, pop, checkcoop}) => {
+const ProjectCard = ({option, pop, checkcoop, checkowner}) => {
 
     useEffect(() => {
         // 페이지 로딩 시에 로컬 스토리지에서 좋아요 상태를 확인하고 설정
@@ -48,7 +48,12 @@ const ProjectCard = ({option, pop, checkcoop}) => {
     const isLogin = useRecoilValue(loginState);
     const gotoDetail =() =>{
         if(isLogin){
-            navigate(`/project/${option.pid}`);
+            if(checkowner){
+                navigate(`/editProject/${option.pid}`);
+            }
+            else{
+                navigate(`/project/${option.pid}`);
+            }
         }
         else{
             window.alert("로그인이 필요한 서비스입니다!");
@@ -93,7 +98,7 @@ const ProjectCard = ({option, pop, checkcoop}) => {
         {option?.recTech ? (
                             <div>
                                 {option.recTech.map((tech, index) => (
-                                <span key={index} style={{ display: index < 3 ? 'inline-block' : 'none' }} >{tech}</span>
+                                <span key={index} style={{ display: index < 3 ? 'inline-block' : 'none' }} >{tech === "C언어" ? "C" : tech === "react" ? "React" : tech}</span>
                                 ))}
                             </div>) 
                             : null}
