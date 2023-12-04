@@ -59,8 +59,7 @@ const Main = () => {
     )
 }
 const PopularSlide = styled(Slider)`
-    width: 850px;
-    position: absolute;
+    width: 870px;
     .slick-list {
         margin: 0;
         overflow: hidden;
@@ -81,7 +80,7 @@ const PopularSlide = styled(Slider)`
         font-size: 40px;
         line-height: 1;
         opacity: .75;
-        color: #0A6E0A;
+        color: #4754A3;
     }
 `;
 const AD = styled.img`
@@ -95,7 +94,10 @@ const Load = styled.div`
     margin-left: 750px;
 `;
 const Container = styled.div`
-    margin-bottom: 300px;
+    /* margin-bottom: 300px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 const ProjectWrapper = styled.div`
     position: relative;

@@ -71,7 +71,9 @@ const MyProject = () => {
         setOwner(false);
         break;
       case "만든 프로젝트":
-        setList(makeproject);
+        console.log(makeproject);
+        const result = makeproject.filter(data => data.projectStatus === "RECRUITING");
+        setList(result);
         setIsCoopReq(false);
         setOwner(true)
         break;
@@ -101,8 +103,8 @@ const MyProject = () => {
   }, [projectActive]);
 
   useEffect(() => {
-    console.log(list);
-    console.log(isCoopReq);
+    // console.log(list);
+    // console.log(isCoopReq);
   }, [list]);
 
   if (isLoading) {
@@ -142,7 +144,9 @@ const Load = styled.div`
 `;
 const Wrapper = styled.div`
   position: relative;
-  margin: 100px 0 0 300px;
+  width: 1000px;
+  margin-left: 320px;
+  margin-top: 100px;
   font-family: "Pretendard-Regular";
 `;
 const Title = styled.h2`

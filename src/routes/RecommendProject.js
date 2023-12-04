@@ -9,6 +9,7 @@ import {
   levelOptionState,
   positionOptionState,
   techOptionState,
+  tokenState,
 } from "../components/atom";
 import { useRecoilValue } from "recoil";
 import axios from 'axios';
@@ -20,6 +21,7 @@ const RecommendProject = () => {
     const positionOption = useRecoilValue(positionOptionState);
     const techOption = useRecoilValue(techOptionState);
     const levelOption = useRecoilValue(levelOptionState);
+    const accessToken = useRecoilValue(tokenState);
     const [filterOptions, setFilterOptions] = useState({
         recPart: [],
         recTech: [],
@@ -167,6 +169,9 @@ const NoOption = styled.div`
 `;
 const Wrapper = styled.div`
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 80%;
     text-align: center;
     margin: 50px auto 0 auto;

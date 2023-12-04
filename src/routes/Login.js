@@ -136,14 +136,15 @@ const EmailInput = styled.input`
   padding: 0 15px;
   border: none;
   border-radius: 10px;
+  color: white;
   outline: none;
   opacity: 0.8;
-  background-color: #c8e6c9;
+  background-color: #4754A3;
   &::placeholder {
-    color: #616161;
+    color: white;
   }
   &:focus {
-    color: black;
+    color: white;
   }
 `;
 const PwInput = styled(EmailInput).attrs({ type: "password" })`
@@ -159,7 +160,7 @@ const LoginButton = styled.button`
   height: 40px;
   margin-left: 135px;
   margin-top: 40px;
-  background-color: #81c784;
+  background-color: #4754A3;
   border-radius: 30px;
   color: white;
   text-align: center;
@@ -167,7 +168,8 @@ const LoginButton = styled.button`
   outline: none;
   cursor: pointer;
   &:hover {
-    background-color: #66bb6a;
+    background-color: #4754A3;
+    opacity: 0.9;
   }
 `;
 const InputAlert = styled.span`

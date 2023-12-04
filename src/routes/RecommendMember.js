@@ -38,39 +38,35 @@ const RecommendMember = () => {
   }
   return (
     <RecMemWrap>
-        <Title>팀원 추천을 받고 싶은 프로젝트 목록을 고르세요!</Title>
-        <SelectArea>
-            <CategorySelect
-                options={projectOptions}
-                onChange={(data)=> setSelectProject(data.value)}
-                placeholder="프로젝트 목록"/>
-        </SelectArea>
+            <Title>팀원 추천을 받고 싶은 프로젝트 목록을 고르세요!</Title>
+            <SelectArea>
+                <CategorySelect
+                    options={projectOptions}
+                    onChange={(data)=> setSelectProject(data.value)}
+                    placeholder="프로젝트 목록"/>
+            </SelectArea>
     </RecMemWrap>
   )
 }
 
 const RecMemWrap = styled.div`
-    position: relative;
-    width: 80%;
+    height: 100px;
+    flex-direction: row;
     text-align: center;
-    margin: 50px auto 0 auto;
     font-family: "Pretendard-Regular";
+    margin-top: 200px;
+`;
+const Title = styled.div`
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 20px;
 `;
 const CategorySelect = styled(Select)`
     width: 260px;
-    margin-right: 50px;
 `;
 const SelectArea = styled.div`
     display: flex;
-    flex-direction: row;
-    position: absolute;
-    top: 50px;
-    left: 140px;
-    margin-bottom: 400px;
-`;
-const Title = styled.h3`
-    position: absolute;
-    left: 140px;
+    justify-content: center;
 `;
 
 export default RecommendMember
