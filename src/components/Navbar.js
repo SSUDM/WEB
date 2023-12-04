@@ -17,11 +17,10 @@ const NavbarStyle = styled.header`
   font-family: "Pretendard-Regular";
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 `;
-const H1 = styled.h1`
-  width: 10%;
-  margin-right: 60px;
-  font-size: 35px;
-  font-weight: 700;
+
+const H1 = styled.img`
+  width: 110px;
+  margin-left: 10px;
   cursor: pointer;
 `;
 const LeftWrapper = styled.div`
@@ -36,14 +35,15 @@ const RightWrapper = styled.div`
   align-items: center;
   gap: 20px;
   margin-right: 15px;
-  span{
+  span {
     font-size: 13px;
     font-weight: bold;
     cursor: pointer;
   }
 `;
 const Menu = styled.p`
-  font-size: 16px;
+  text-align: center;
+  font-size: 15px;
   width: 100px;
   height: 36px;
   text-align: center;
@@ -56,7 +56,7 @@ const Menu = styled.p`
 const Login = styled.p`
   cursor: pointer;
   font-size: 14px;
-  span{
+  span {
     font-size: 16px;
     font-weight: bold;
   }
@@ -91,31 +91,31 @@ const Navbar = () => {
   const goToMain = () => {
     navigate("/");
   };
-  const manageProject =() =>{
-    navigate('/myproject');
-  }
+  const manageProject = () => {
+    navigate("/myproject");
+  };
   const gotoRecProject = () => {
     navigate("/recommend");
   };
   const gotoMember = () => {
     navigate("/recmember");
-  }
-  const gotoEditProfile =() =>{
-    navigate('/editProfile');
-  }
-  const gotoNewProject =() =>{
-    navigate('/newProject');
-  }
-  useEffect(()=>{
+  };
+  const gotoEditProfile = () => {
+    navigate("/editProfile");
+  };
+  const gotoNewProject = () => {
+    navigate("/newProject");
+  };
+  useEffect(() => {
     // console.log(isLogin);
-  },[])
+  }, []);
   return (
     <NavbarStyle>
       <LeftWrapper>
         <H1 onClick={goToMain}>DM</H1>
-        <Menu onClick={manageProject}>프로젝트 관리</Menu>
         <Menu onClick={gotoRecProject}>추천 프로젝트</Menu>
         <Menu onClick={gotoMember}>추천 팀원</Menu>
+        <Menu onClick={manageProject}>프로젝트 관리</Menu>
       </LeftWrapper>
 
       <RightWrapper>
