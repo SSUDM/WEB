@@ -175,9 +175,25 @@ const NewProject = () => {
       reader.readAsDataURL(file);
     }
   };
-  console.log(authToken);
+
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate required fields
+    if (
+      !title ||
+      !count ||
+      !positions ||
+      !techs ||
+      !level ||
+      !period ||
+      !endDate ||
+      !content
+    ) {
+      alert("필수 항목을 채워주세요.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("maximumMember", count);
@@ -225,7 +241,7 @@ const NewProject = () => {
         onChange={insertImg}
       />
       <Title>
-        <h1>프로젝트 명</h1>
+        <h1>프로젝트 명*</h1>
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -234,7 +250,7 @@ const NewProject = () => {
       </Title>
       <Tags>
         <Tag>
-          <span>모집 파트</span>
+          <span>모집 파트*</span>
           <Options
             onChange={(selectOptions) =>
               setPositions(selectOptions.map((option) => option.value))
@@ -244,7 +260,7 @@ const NewProject = () => {
           />
         </Tag>
         <Tag>
-          <span>모집 인원</span>
+          <span>모집 인원*</span>
           <MemberCount
             type="number"
             min="0"
@@ -252,7 +268,7 @@ const NewProject = () => {
           />
         </Tag>
         <Tag>
-          <span>기술 스택</span>
+          <span>기술 스택*</span>
           <Options
             onChange={(selectOptions) =>
               setTechs(selectOptions.map((option) => option.value))
@@ -262,18 +278,18 @@ const NewProject = () => {
           />
         </Tag>
         <Tag>
-          <span>개발 기간</span>
+          <span>개발 기간*</span>
           <Options
             onChange={(selectOptions) => setPeriod(selectOptions.value)}
             options={periodOption}
           />
         </Tag>
         <Tag>
-          <span>모집 마감</span>
+          <span>모집 마감*</span>
           <Date type="date" onChange={(e) => setEndDate(e.target.value)} />
         </Tag>
         <Tag>
-          <span>요구 숙련도</span>
+          <span>요구 숙련도*</span>
           <Options
             onChange={(selectOptions) => setLevel(selectOptions.value)}
             options={levelOption}
@@ -281,7 +297,7 @@ const NewProject = () => {
         </Tag>
       </Tags>
       <Description>
-        <h1>프로젝트 소개</h1>
+        <h1>프로젝트 소개*</h1>
         <Contents
           placeholder="프로젝트 내용을 입력해주세요."
           value={content}

@@ -358,11 +358,17 @@ const NewProfile = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate required fields
+    if (!position || !level || !techs || !level || !introduction) {
+      alert("필수 항목을 채워주세요.");
+      return;
+    }
+
     const formData = new FormData();
     if (userImg) {
       formData.append("userImg", userImg);
     }
-    formData.append("nickName", nickname);
     formData.append("part", position);
     formData.append("level", level);
     formData.append("tech", techs);
@@ -465,14 +471,14 @@ const NewProfile = () => {
             <Name>{nickname}</Name>
           </Content>
           <Content>
-            <h1>파트</h1>
+            <h1>파트*</h1>
             <SmallSelect
               options={positionOption}
               onChange={(data) => setPosition(data.value)}
             />
           </Content>
           <Content>
-            <h1>숙련도</h1>
+            <h1>숙련도*</h1>
             <SmallSelect
               options={levelOption}
               onChange={(data) => setLevel(data.value)}
@@ -481,7 +487,7 @@ const NewProfile = () => {
         </UserInfo>
       </UserInfoContainer>
       <Introduction>
-        <h1>자기 소개</h1>
+        <h1>자기 소개*</h1>
         <input
           type="text"
           placeholder="자유롭게 입력해주세요."
@@ -489,7 +495,7 @@ const NewProfile = () => {
         />
       </Introduction>
       <TechStack>
-        <h1>기술 스택</h1>
+        <h1>기술 스택*</h1>
         <TechSelect
           options={techOption}
           onChange={(array) => {
