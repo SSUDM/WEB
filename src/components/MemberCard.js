@@ -33,23 +33,14 @@ const MemberCard = ({ data }) => {
       </Rank>
       <Tech>
         {data?.tech ? (
-          <div>
-            {data.tech.map((tech, index) => (
-              <span
-                key={index}
-                style={{ display: index < 3 ? "inline-block" : "none" }}
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        ) : null}
-      </Tech>
-      <Present>
-        {data?.introduction
-          ? data?.introduction
-          : "정상을 향해 나아가는 개발자 차현수"}
-      </Present>
+                        <div>
+                            {data.tech.map((tech, index) => (
+                            <span key={index} style={{ display: index < 3 ? 'inline-block' : 'none' }} >{tech}</span>
+                            ))}
+                        </div>) 
+                        : null}
+        </Tech>
+        <Present>{data?.introduction?data?.introduction:'자기 소개가 없습니다.'}</Present>
     </Card>
   );
 };

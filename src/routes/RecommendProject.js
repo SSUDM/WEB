@@ -9,6 +9,7 @@ import {
   levelOptionState,
   positionOptionState,
   techOptionState,
+  tokenState,
 } from "../components/atom";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
@@ -17,27 +18,28 @@ import { getRecommendProject } from "../api";
 import { FadeLoader } from "react-spinners";
 
 const RecommendProject = () => {
-  const positionOption = useRecoilValue(positionOptionState);
-  const techOption = useRecoilValue(techOptionState);
-  const levelOption = useRecoilValue(levelOptionState);
-  const [filterOptions, setFilterOptions] = useState({
-    recPart: [],
-    recTech: [],
-    recLevel: [],
-  });
-  const [isSelect, setIsSelect] = useState(false);
-  const [list, setList] = useState("");
-  const settings = {
-    slide: <ProjectCard />,
-    dots: true,
-    infinite: false,
-    focusOnChange: true,
-    speed: 950,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    rows: 2,
-    centerPadding: "10px",
-  };
+    const positionOption = useRecoilValue(positionOptionState);
+    const techOption = useRecoilValue(techOptionState);
+    const levelOption = useRecoilValue(levelOptionState);
+    const accessToken = useRecoilValue(tokenState);
+    const [filterOptions, setFilterOptions] = useState({
+        recPart: [],
+        recTech: [],
+        recLevel: [],
+    });
+    const [isSelect, setIsSelect] = useState(false);
+    const [list ,setList] = useState('');
+    const settings = {
+        slide: <ProjectCard />,
+        dots: true,
+        infinite: false,
+        focusOnChange: true,
+        speed: 950,
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        rows: 2,
+        centerPadding: '10px',
+      };
 
   const { isLoading, data: recproject } = useQuery({
     queryKey: ["recproject"],
@@ -179,11 +181,14 @@ const NoOption = styled.div`
   text-align: center;
 `;
 const Wrapper = styled.div`
-  position: relative;
-  width: 80%;
-  text-align: center;
-  margin: 50px auto 0 auto;
-  font-family: "Pretendard-Regular";
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    text-align: center;
+    margin: 50px auto 0 auto;
+    font-family: "Pretendard-Regular";
 `;
 const Filter = styled.div`
   position: absolute;
