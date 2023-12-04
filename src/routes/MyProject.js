@@ -21,6 +21,7 @@ const MyProject = () => {
   const [projectActive, setProjectActive] = useState("");
   const [list, setList] = useState("");
   const [isCoopReq, setIsCoopReq] = useState(true);
+  const [owner, setOwner] = useState(true);
 
   const { isLoading, data: cooperateproject } = useQuery({
     queryKey: ["cooperateproject"],
@@ -67,26 +68,32 @@ const MyProject = () => {
       case "협업 요청 온 프로젝트":
         setList(cooperateproject);
         setIsCoopReq(true);
+        setOwner(false);
         break;
       case "만든 프로젝트":
         setList(makeproject);
         setIsCoopReq(false);
+        setOwner(true)
         break;
       case "참여중인 프로젝트":
         setList(joinproject);
         setIsCoopReq(false);
+        setOwner(false);
         break;
       case "찜한 프로젝트":
         setList(likeproject);
         setIsCoopReq(false);
+        setOwner(false);
         break;
       case "승인 대기중인 프로젝트":
         setList(requestproject);
         setIsCoopReq(false);
+        setOwner(false);
         break;
       case "참여 했던 프로젝트":
         setList(doneproject);
         setIsCoopReq(false);
+        setOwner(false);
         break;
       default:
         break;
@@ -121,7 +128,7 @@ const MyProject = () => {
           <>
             {list &&
               list.map((option) => {
-                return <ProjectCard option={option} checkcoop={isCoopReq} />;
+                return <ProjectCard option={option} checkcoop={isCoopReq} checkowner={owner} />;
               })}
           </>
         )}

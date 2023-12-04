@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { ReactComponent as Heart } from "../Img/WishHeart.svg";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { loginState } from "./atom";
-import { useRecoilValue } from "recoil";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import {ReactComponent as Heart} from "../Img/WishHeart.svg";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { loginState } from './atom';
+import { useRecoilValue } from 'recoil';
 
-const ProjectCard = ({ option, pop, checkcoop }) => {
-  useEffect(() => {
-    // 페이지 로딩 시에 로컬 스토리지에서 좋아요 상태를 확인하고 설정
-    const likeStatus = localStorage.getItem(`like${option?.pid}`);
-    if (likeStatus !== null) {
-      setIsWished(likeStatus === "true"); // 'true' 또는 'false'로 저장되므로 이에 맞게 설정
-    }
-  }, [option?.pid]);
+const ProjectCard = ({option, pop, checkcoop, checkowner}) => {
+
+    useEffect(() => {
+        // 페이지 로딩 시에 로컬 스토리지에서 좋아요 상태를 확인하고 설정
+        const likeStatus = localStorage.getItem(`like${option?.pid}`);
+        if (likeStatus !== null) {
+          setIsWished(likeStatus === 'true'); // 'true' 또는 'false'로 저장되므로 이에 맞게 설정
+        }
+      }, [option?.pid]);
+
 
   const [isWished, setIsWished] = useState(false);
   const wishHandler = (e) => {
@@ -116,6 +118,35 @@ const ProjectCard = ({ option, pop, checkcoop }) => {
           "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
             ? option?.projectImg
             : "../../img/project.jpg"
+        }/>
+
+        <Tech>
+        {option?.recTech ? (
+                            <div>
+                                {option.recTech.map((tech, index) => (
+                                <span key={index} style={{ display: index < 3 ? 'inline-block' : 'none' }} >{tech === "C언어" ? "C" : tech === "react" ? "React" : tech}</span>
+                                ))}
+                            </div>) 
+                            : null}
+        </Tech>
+        <Part>{option?.recPart ? (
+                            <div>
+                                {option.recPart.map((part, index) => (
+                                <span key={index} style={{ display: index < 3 ? 'inline-block' : 'none' }} >{part}</span>
+                                ))}
+                            </div>) 
+                            : null}
+        </Part>
+        <Title>{option?.title}</Title>
+        {checkcoop ? 
+            <RequestButton style={{display:'flex'}}>
+                <Accept onClick={handleAccept}>수락</Accept>
+                <Decline onClick={handleDecline}>거절</Decline>
+            </RequestButton>
+            :
+            <LikedButton onClick={(e)=>wishHandler(e)}>
+                {isWished ? <Heart width="20px" fill="red" stroke="red"/> : localStorage.getItem(`like${option?.pid}`) ? <Heart width="20px" fill="red" stroke="red"/> : <Heart width="20px"/>}
+            </LikedButton>
         }
       />
       <Tech>
