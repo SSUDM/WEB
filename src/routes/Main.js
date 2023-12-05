@@ -32,6 +32,7 @@ const Main = () => {
     return (
       <>
         <Load>
+            <div>로딩 중..</div>
           <FadeLoader />
         </Load>
       </>
@@ -39,8 +40,8 @@ const Main = () => {
   }
   return (
     <Container>
+      <Title>인기 프로젝트</Title>
       <ProjectWrapper>
-        <h3>인기 프로젝트</h3>
         <CardWrapper>
           <PopularSlide {...settings}>
             {popproject &&
@@ -80,20 +81,27 @@ const PopularSlide = styled(Slider)`
 `;
 
 const Load = styled.div`
-  margin-left: 750px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 550px;
 `;
 const Container = styled.div`
-    /* margin-bottom: 300px; */
+    margin-top: 100px;
+`;
+const ProjectWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`;
-const ProjectWrapper = styled.div`
-    position: relative;
-    width: 70%;
-    height: 300px;
-    margin: 10px 100px 0 auto;
+    margin: 0 auto;
     font-family: "Pretendard-Regular";
+`;
+const Title = styled.div`
+    width: 850px;
+    margin: 0 auto;
+    font-size: 22px;
+    font-weight: bold;
 `;
 const CardWrapper = styled.div`
   display: flex;

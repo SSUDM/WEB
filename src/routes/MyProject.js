@@ -111,6 +111,7 @@ const MyProject = () => {
   if (isLoading) {
     return (
       <Load>
+        <div>로딩 중..</div>
         <FadeLoader />
       </Load>
     );
@@ -118,12 +119,14 @@ const MyProject = () => {
   return (
     <Wrapper>
       <Title>내 프로젝트</Title>
-      <ActiveSelect
-        defaultValue={projectactiveOption[0]}
-        options={projectactiveOption}
-        placeholder="프로젝트 종류"
-        onChange={(data) => setProjectActive(data.value)}
-      />
+      <SelectArea>
+        <ActiveSelect
+          defaultValue={projectactiveOption[0]}
+          options={projectactiveOption}
+          placeholder="프로젝트 종류"
+          onChange={(data) => setProjectActive(data.value)}
+        />
+      </SelectArea>
       <DefaultWrap>
         {list && list.length === 0 ? (
           <NoProject>프로젝트 목록이 없습니다..</NoProject>
@@ -140,35 +143,46 @@ const MyProject = () => {
   );
 };
 const Load = styled.div`
-  margin-left: 650px;
-  margin-top: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 600px;
+
 `;
 const Wrapper = styled.div`
-  position: relative;
-  width: 1000px;
-  margin-left: 320px;
-  margin-top: 100px;
   font-family: "Pretendard-Regular";
+  width: 1000px;
+  margin: 80px auto;
 `;
 const Title = styled.h2`
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin: 0 auto;
   font-size: 20px;
   font-weight: bold;
-  margin-left: 20px;
+`;
+const SelectArea = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 30px;
 `;
 const ActiveSelect = styled(Select)`
   width: 230px;
-  margin: 0 0 50px 670px;
 `;
 const DefaultWrap = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 280px);
-  gap: 0px 30px;
-  margin-top: -10px;
+  gap: 0px 60px;
+  margin-top: 50px;
 `;
 const NoProject = styled.div`
-  position: absolute;
-  top: 270px;
-  left: 280px;
+  width: 1000px;
+  text-align: center;
+  margin-top: 60px;
   font-size: 30px;
 `;
 export default MyProject;
