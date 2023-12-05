@@ -132,8 +132,8 @@ const RecommendProject = () => {
           isMulti
         />
       </SelectArea>
+      <Text>추천 프로젝트</Text>
       <ProjectWrapper>
-        <Text>추천 프로젝트</Text>
         <CardWrapper>
           {isSelect ? (
             // <PopularSlide {...settings}>
@@ -174,52 +174,44 @@ const DefaultWrap = styled.div`
   margin-top: -10px;
 `;
 const NoOption = styled.div`
-  position: absolute;
-  top: 210px;
-  right: 310px;
   font-size: 30px;
   text-align: center;
+  width: 900px;
+  padding-top: 50px;
+  padding-left: 30px;
 `;
 const Wrapper = styled.div`
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
+    width: 100%;
     text-align: center;
-    margin: 50px auto 0 auto;
     font-family: "Pretendard-Regular";
+    margin-top: 40px;
 `;
 const Filter = styled.div`
-  position: absolute;
   font-size: 20px;
   font-weight: bold;
-  top: 10px;
-  left: 140px;
+  text-align: center;
 `;
 const CategorySelect = styled(Select)`
-  width: 260px;
-  margin-right: 50px;
+  width: 270px;
+  margin-right: 30px;
 `;
 const SelectArea = styled.div`
   display: flex;
   flex-direction: row;
-  position: absolute;
-  top: 50px;
-  left: 140px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
 `;
 const Text = styled.div`
-  position: absolute;
-  width: 200px;
-  top: 20px;
-  left: -41px;
-  font-size: 22px;
+  text-align: center;
+  font-size: 20px;
   font-weight: bold;
+  margin-top: 55px;
 `;
 const ProjectWrapper = styled.div`
-  position: absolute;
-  top: 180px;
-  left: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const CardWrapper = styled.div`
   margin: 70px 0 40px 0;
