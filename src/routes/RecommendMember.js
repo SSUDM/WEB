@@ -21,20 +21,24 @@ const RecommendMember = () => {
     ? selproject
         .filter((project) => project.projectStatus === "RECRUITING")
         .map((project) => ({
-          value: project.title,
+          value: project.pid,
           label: project.title,
         }))
     : [];
 
     useEffect(()=>{
         selproject&&selproject.map((data)=>{
-            if(data.title === selectProject){
+            if(data.pid === selectProject){
                 console.log(data);
                 navigate(`/recmember/${data.pid}`);
             }
+            console.log(selectProject);
         })
     },[selectProject])
 
+    useEffect(()=>{
+        console.log(selproject)
+    },[selproject])
   if(isLoading){
     return(
         <div>로딩 중..</div>

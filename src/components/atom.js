@@ -19,7 +19,7 @@ export const techOptionState = atom({
   key: "techOptionState",
   default: [
     { value: "AWS", label: "AWS" },
-    { value: "C언어", label: "C" },
+    { value: "C언어", label: "C언어" },
     { value: "Django", label: "Django" },
     { value: "Docker", label: "Docker" },
     { value: "Express", label: "Express" },
@@ -41,7 +41,7 @@ export const techOptionState = atom({
     { value: "Node.js", label: "Node.js" },
     { value: "PHP", label: "PHP" },
     { value: "Python", label: "Python" },
-    { value: "React", label: "React" },
+    { value: "react", label: "react" },
     { value: "ReactNative", label: "ReactNative" },
     { value: "Spring", label: "Spring" },
     { value: "Svelte", label: "Svelte" },

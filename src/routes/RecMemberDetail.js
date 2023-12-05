@@ -10,7 +10,8 @@ const RecMemberDetail = () => {
   const {pid} = useParams();
   const [backEnd, setBackEnd] = useState('');
   const [frontEnd, setFrontEnd] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [mobile_ios, setMobileIOS] = useState('');
+  const [mobile_android, setMobileAndroid] = useState('');
   const [design, setDesign] = useState('');
   const [list, setList] = useState('');
   const [isLoading,setIsLoading] = useState(true);
@@ -35,15 +36,17 @@ const RecMemberDetail = () => {
   },[pid])  
 useEffect(()=>{
     console.log(list);
-    const {BackEnd, FrontEnd, Mobile, Design} = list;
+    const {BackEnd, FrontEnd, Mobile_IOS, Mobile_Android, Design} = list;
     console.log('BackEnd' ,BackEnd);
     console.log('FrontEnd' ,FrontEnd);
-    console.log('Mobile' ,Mobile);
+    console.log('Mobile' ,Mobile_IOS);
+    console.log('Mobile' ,Mobile_Android);
     console.log('Design', Design);
 
     setBackEnd(BackEnd);
     setFrontEnd(FrontEnd);
-    setMobile(Mobile);
+    setMobileIOS(Mobile_IOS);
+    setMobileAndroid(Mobile_Android);
     setDesign(Design);
 },[list])
 
@@ -88,13 +91,26 @@ useEffect(()=>{
           ) : null}
         </FrontEndContainer>
         <MobileContainer>
-          <h4 style={{ display: mobile !== undefined ? "block" : "none" }}>
-            모바일 팀원 추천
+          <h4 style={{ display: mobile_ios !== undefined ? "block" : "none" }}>
+            IOS 팀원 추천
           </h4>
-          {mobile !== undefined ? (
+          {mobile_ios !== undefined ? (
             <Wrapper>
-              {mobile &&
-                mobile.map((data) => {
+              {mobile_ios &&
+                mobile_ios.map((data) => {
+                  return <MemberCard data={data} />;
+                })}
+            </Wrapper>
+          ) : null}
+        </MobileContainer>
+        <MobileContainer>
+          <h4 style={{ display: mobile_android !== undefined ? "block" : "none" }}>
+            Android 팀원 추천
+          </h4>
+          {mobile_android !== undefined ? (
+            <Wrapper>
+              {mobile_android &&
+                mobile_android.map((data) => {
                   return <MemberCard data={data} />;
                 })}
             </Wrapper>
@@ -118,37 +134,40 @@ useEffect(()=>{
   )
 }
 const Load = styled.div`
-    margin-top: 280px;
-    margin-left: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
 `;
-
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 270px);
   gap: 40px;
 `;
 const RecMemWrap = styled.div`
-  position: relative;
-  width: 80%;
-  text-align: center;
-  margin: 50px 0 0 30px;
+  display: flex;
+  flex-direction: column;
   font-family: "Pretendard-Regular";
 `;
 const Title = styled.h3`
-  position: absolute;
-  left: 140px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 1180px;
+  margin: 0 auto;
   font-size: 25px;
+  margin-top: 60px;
 `;
 const CardWrap = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  position: absolute;
-  top: 70px;
-  left: 140px;
 `;
 const BackEndContainer = styled.div`
-    text-align: left;
     h4{
+        text-align: center;
         font-size: 20px;
     }
 `;
