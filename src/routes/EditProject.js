@@ -221,6 +221,22 @@ const EditProject = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate required fields
+    if (
+      !title ||
+      !count ||
+      !positions ||
+      !techs ||
+      !level ||
+      !period ||
+      !endDate ||
+      !content
+    ) {
+      alert("필수 항목을 채워주세요.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("maximumMember", count);

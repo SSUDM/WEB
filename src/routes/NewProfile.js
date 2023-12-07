@@ -360,7 +360,7 @@ const NewProfile = () => {
     e.preventDefault();
 
     // Validate required fields
-    if (!position || !level || !techs || !level || !introduction) {
+    if (!position || !level || !techs || !introduction) {
       alert("필수 항목을 채워주세요.");
       return;
     }

@@ -407,6 +407,12 @@ const EditProfile = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    if (!position || !level || !techs || !introduction) {
+      alert("필수 항목을 채워주세요.");
+      return;
+    }
+
     const formData = new FormData();
     if (userImg) {
       formData.append("userImg", userImg);
