@@ -519,7 +519,7 @@ const EditProfile = () => {
             <SmallSelect
               value={position}
               options={positionOption}
-              onChange={(data) => setPosition(data.value)}
+              onChange={(data) => setPosition(data)}
             />
           </Content>
           <Content>
@@ -527,7 +527,7 @@ const EditProfile = () => {
             <SmallSelect
               value={level}
               options={levelOption}
-              onChange={(data) => setLevel(data.value)}
+              onChange={(data) => setLevel(data)}
             />
           </Content>
         </UserInfo>
