@@ -350,7 +350,7 @@ const EditProfile = () => {
     queryKey: ["resume"],
     queryFn: () => getResume(userId.toString()),
   });
-  // console.log(resume);
+  console.log(resume);
   useEffect(() => {
     if (resume) {
       setPosition({
@@ -365,7 +365,7 @@ const EditProfile = () => {
         resume.userImg !==
         "https://developermatching.s3.ap-northeast-2.amazonaws.com/"
       ) {
-        setUserImg(resume.userImg);
+        setPreviewImg(resume.userImg);
       }
       setTechs(
         resume.tech.map((data) => ({
@@ -415,7 +415,7 @@ const EditProfile = () => {
     }
 
     const formData = new FormData();
-    if (userImg && userImg !== resume.userImg) {
+    if (userImg) {
       formData.append("userImg", userImg);
     }
     formData.append("part", position.value);
@@ -427,8 +427,12 @@ const EditProfile = () => {
     formData.append("introduction", introduction);
     careers.forEach((data, index) => {
       formData.append(`careerList[${index}].cid`, data.cid);
-      formData.append(`careerList[${index}].startDate`, data.startDate);
-      formData.append(`careerList[${index}].endDate`, data.endDate);
+      if (data.startDate !== null) {
+        formData.append(`careerList[${index}].startDate`, data.startDate);
+      }
+      if (data.endDate !== null) {
+        formData.append(`careerList[${index}].endDate`, data.endDate);
+      }
       formData.append(`careerList[${index}].career`, data.career);
     });
     projects.forEach((data, index) => {

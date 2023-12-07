@@ -375,8 +375,12 @@ const NewProfile = () => {
     formData.append("introduction", introduction);
     careers.forEach((data, index) => {
       formData.append(`careerList[${index}].cid`, data.cid);
-      formData.append(`careerList[${index}].startDate`, data.startDate);
-      formData.append(`careerList[${index}].endDate`, data.endDate);
+      if (data.startDate !== null) {
+        formData.append(`careerList[${index}].startDate`, data.startDate);
+      }
+      if (data.endDate !== null) {
+        formData.append(`careerList[${index}].endDate`, data.endDate);
+      }
       formData.append(`careerList[${index}].career`, data.career);
     });
     projects.forEach((data, index) => {
