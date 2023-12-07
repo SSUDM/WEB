@@ -329,6 +329,7 @@ const EditProfile = () => {
   const levelOption = useRecoilValue(levelOptionState);
   const techOption = useRecoilValue(techOptionState);
   const [userImg, setUserImg] = useState(null);
+  const [previewImg, setPreviewImg] = useState(null);
   const [position, setPosition] = useState("");
   const [level, setLevel] = useState("");
   const [techs, setTechs] = useState([]);
@@ -399,7 +400,7 @@ const EditProfile = () => {
       let reader = new FileReader();
       reader.onload = () => {
         const fileURL = reader.result;
-        setUserImg(fileURL);
+        setPreviewImg(fileURL);
       };
       reader.readAsDataURL(file);
     }
@@ -414,7 +415,7 @@ const EditProfile = () => {
     }
 
     const formData = new FormData();
-    if (userImg) {
+    if (userImg && userImg !== resume.userImg) {
       formData.append("userImg", userImg);
     }
     formData.append("part", position.value);
@@ -506,7 +507,9 @@ const EditProfile = () => {
     <Container>
       <UserInfoContainer>
         <label for="file">
-          <UserImg src={userImg ? userImg : "../../img/default_profile.png"} />
+          <UserImg
+            src={previewImg ? previewImg : "../../img/default_profile.png"}
+          />
         </label>
         <input
           type="file"
