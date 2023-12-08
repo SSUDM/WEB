@@ -9,8 +9,8 @@ export const positionOptionState = atom({
     { value: "FrontEnd", label: "Frontend" },
     { value: "BackEnd", label: "Backend" },
     { value: "Design", label: "Design" },
-    { value: "Android", label: "Android" },
-    { value: "IOS", label: "IOS" },
+    { value: "Mobile_Android", label: "Android" },
+    { value: "Mobile_IOS", label: "IOS" },
   ],
 });
 
