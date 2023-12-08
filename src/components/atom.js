@@ -6,7 +6,6 @@ const { persistAtom } = recoilPersist();
 export const positionOptionState = atom({
   key: "positionOptionState",
   default: [
-    { value: "PM", label: "PM" },
     { value: "FrontEnd", label: "Frontend" },
     { value: "BackEnd", label: "Backend" },
     { value: "Design", label: "Design" },
