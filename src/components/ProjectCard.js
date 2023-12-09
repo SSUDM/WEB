@@ -7,6 +7,7 @@ import { loginState } from "./atom";
 import { useRecoilValue } from "recoil";
 
 const ProjectCard = ({ option, pop, checkcoop, checkowner }) => {
+  // console.log(option);
   useEffect(() => {
     // 페이지 로딩 시에 로컬 스토리지에서 좋아요 상태를 확인하고 설정
     const likeStatus = localStorage.getItem(`like${option?.pid}`);
@@ -74,7 +75,7 @@ const ProjectCard = ({ option, pop, checkcoop, checkowner }) => {
         }
       );
       console.log(res);
-      navigate(`/project${option.pid}`);
+      navigate(`/project/${option.pid}`);
     } catch (err) {
       console.log(err);
     }
@@ -141,7 +142,7 @@ const ProjectCard = ({ option, pop, checkcoop, checkowner }) => {
                 key={index}
                 style={{ display: index < 3 ? "inline-block" : "none" }}
               >
-                {part}
+                {part === "Mobile_Android" ? "Android" : part === "Mobile_IOS" ? "IOS" : part}
               </span>
             ))}
           </div>

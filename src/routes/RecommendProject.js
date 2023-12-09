@@ -48,7 +48,7 @@ const RecommendProject = () => {
   });
 
   useEffect(() => {
-    //   console.log(recproject);
+      console.log(recproject);
     console.log(filterOptions);
     const sendData = async () => {
       try {
